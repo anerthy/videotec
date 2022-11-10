@@ -1,0 +1,165 @@
+USE VIDEOTEC
+GO
+
+select * from tbl_empresa
+select emp_id_empresa,emp_nombre,emp_telefono,emp_direccion,emp_correo,emp_logo from tbl_empresa
+
+select * from tbl_actor
+select act_id_actor,act_nombre,act_nombre_nacimiento,act_nacionalidad,act_biografia,act_año_inicio,act_fecha_nacimiento,act_ocupacion,act_imagen from tbl_actor
+
+select * from tbl_genero_pelicula
+select gen_id_genero,gen_nombre,gen_descripcion,gen_imagen from tbl_genero_pelicula
+
+select * from tbl_productora
+select prod_id_productora,prod_nombre,prod_año_fundacion,prod_descripcion,prod_sitio_web,prod_logo from tbl_productora
+
+select * from tbl_director
+select dir_id_director,dir_nombre,dir_nombre_nacimiento,dir_nacionalidad,dir_biografia,dir_fecha_nacimiento,dir_imagen from tbl_director
+
+select * from tbl_clasificacion
+select clasf_simbolo,clasf_nombre,clasf_significado from tbl_clasificacion
+
+select * from tbl_pelicula
+select pel_id_pelicula,pel_titulo,pel_sinopsis,pel_clasificacion,pel_duracion,pel_año_publicacion,pel_stock_cintas,pel_pais,pel_precio,pel_disponibilidad,pel_portada,pel_trailer from tbl_pelicula
+
+select * from tbl_socio
+select soc_codigo_socio,soc_cedula,soc_nombre,soc_apellido1,soc_apellido2,soc_correo,soc_telefono,soc_codigo_postal,soc_direccion_exacta,soc_genero,soc_fecha_nacimiento,soc_foto_perfil from tbl_socio
+
+select * from tbl_idioma
+select idm_id_idioma,idm_nombre from tbl_idioma
+
+select * from tbl_cinta
+select cin_numero_cinta,cin_idioma,cin_pelicula_id,cin_estado from tbl_cinta
+
+select * from tbl_subtitulos_cinta
+select sub_subtitulos_cinta,sub_numero_cinta,sub_idioma_id from tbl_subtitulos_cinta
+
+select * from tbl_pelicula_genero
+select pel_gen_id_pelicula_genero,pel_gen_genero_id,pel_gen_pelicula_id from tbl_pelicula_genero
+
+select * from tbl_pelicula_actor
+select pel_act_id_pelicula_actor,pel_act_actor_id,pel_act_tipo_actor,pel_act_pelicula_id from tbl_pelicula_actor
+
+select * from tbl_pelicula_productora
+select pel_prod_id_pelicula_productora,pel_prod_productora_id,pel_prod_pelicula_id from tbl_pelicula_productora
+
+select * from tbl_pelicula_director
+select pel_dir_id_pelicula_director,pel_dir_pelicula_id,pel_dir_director_id from tbl_pelicula_director
+
+select * from tbl_socio_actor
+select soc_act_id_socio_actor,soc_act_codigo_socio,soc_act_actor_id from tbl_socio_actor
+
+select * from tbl_socio_director
+select soc_dir_id_socio_director,soc_dir_codigo_socio,soc_dir_director_id from tbl_socio_director
+
+select * from tbl_socio_genero
+select soc_gen_id_socio_genero,soc_gen_codigo_socio,soc_gen_genero_id from tbl_socio_genero
+
+select * from tbl_llamada
+select lla_id_llamada,lla_codigo_socio,lla_pelicula_id from tbl_llamada
+
+select * from tbl_rol
+select rol_id_rol,rol_nombre,rol_descripcion from tbl_rol
+
+select * from tbl_usuario
+select user_id_usuario,user_nombre,user_correo,user_contraseña,user_rol_id,user_foto from tbl_usuario
+
+select * from tbl_prestamo
+select pres_id_prestamo,pres_fecha_prestamo,pres_fecha_devolucion,pres_codigo_socio,pres_precio_total from tbl_prestamo
+
+select * from tbl_detalle_prestamo
+select det_pres_id_detalle_prestamo,det_pres_prestamo_id,det_pres_numero_cinta,det_pres_sub_total from tbl_detalle_prestamo
+
+select * from tbl_carrito_compra
+select carr_id_carrito,carr_pelicula_id,carr_codigo_socio,carr_estado from tbl_carrito_compra
+
+select * from tbl_lista_espera
+select list_id_lista_espera,list_codigo_socio,list_pelicula_id,list_fecha_solicitud from tbl_lista_espera
+
+select * from tbl_registro_prestamos
+select reg_pres_id_registro_prestamos,reg_pres_numero_cinta,reg_pres_codigo_socio,reg_pres_fecha_prestamo,reg_pres_fecha_devolucion from tbl_registro_prestamos
+
+select * from tbl_devolucion_cinta
+select del_cin_id_devolucion_cinta,del_cin_numero_cinta,del_cin_codigo_socio,del_cin_fecha_prestamo,del_cin_fecha_devolucion from tbl_devolucion_cinta
+
+-- SELECTS DE TABLAS DE BITACORA
+select * from tbl_bitacora_actor
+select bit_act_id_bitacora_actor,bit_act_usuario,bit_act_actor,bit_act_accion,bit_act_fecha_accion from tbl_bitacora_actor
+
+select * from tbl_bitacora_carrito_compra
+select bit_carr_id_bitacora_carrito_compra,bit_carr_usuario,bit_carr_carrito_compra,bit_carr_accion,bit_carr_fecha_accion from tbl_bitacora_carrito_compra
+
+select * from tbl_bitacora_cinta
+select bit_cin_id_bitacora_cinta,bit_cin_usuario,bit_cin_cinta,bit_cin_accion,bit_cin_fecha_accion from tbl_bitacora_cinta
+
+select * from tbl_bitacora_clasificacion
+select bit_clasf_id_bitacora_clasificacion,bit_clasf_usuario,bit_clasf_clasificacion,bit_clasf_accion,bit_clasf_fecha_accion from tbl_bitacora_clasificacion
+
+select * from tbl_bitacora_detalle_prestamo
+select bit_det_pres_id_bitacora_detalle_prestamo,bit_det_pres_usuario,bit_det_pres_detalle_prestamo,bit_det_pres_accion,bit_det_pres_fecha_accion from tbl_bitacora_detalle_prestamo
+
+select * from tbl_bitacora_devolucion_cinta
+select bit_del_cin_id_bitacora_devolucion_cinta,bit_del_cin_usuario,bit_del_cin_devolucion_cinta,bit_del_cin_accion,bit_del_cin_fecha_accion from tbl_bitacora_devolucion_cinta
+
+select * from tbl_bitacora_director
+select bit_dir_id_bitacora_director,bit_dir_usuario	bit_dir_director,bit_dir_accion,bit_dir_fecha_accion from tbl_bitacora_director
+
+select * from tbl_bitacora_empresa
+select bit_emp_id_bitacora_empresa,bit_emp_usuario,bit_emp_empresa,bit_emp_accion,bit_emp_fecha_accion from tbl_bitacora_empresa
+
+select * from tbl_bitacora_genero_pelicula
+select bit_gen_id_bitacora_genero_pelicula,bit_gen_usuario,bit_gen_genero_pelicula,bit_gen_accion,bit_gen_fecha_accion from tbl_bitacora_genero_pelicula
+
+select * from tbl_bitacora_idioma
+select bit_idm_id_bitacora_idioma,bit_idm_usuario,bit_idm_idioma_id,bit_idm_accion,bit_idm_fecha_accion from tbl_bitacora_idioma
+
+select * from tbl_bitacora_lista_espera
+select bit_list_id_bitacora_lista_espera,bit_list_usuario,bit_list_lista_espera,bit_list_accion,bit_list_fecha_accion from tbl_bitacora_lista_espera
+
+select * from tbl_bitacora_llamada
+select bit_lla_id_bitacora_llamada,bit_lla_usuario,bit_lla_llamada,bit_lla_accion,bit_lla_fecha_accion from tbl_bitacora_llamada
+
+select * from tbl_bitacora_pelicula
+select bit_pel_id_bitacora_pelicula,bit_pel_usuario,bit_pel_pelicula,bit_pel_accion,bit_pel_fecha_accion from tbl_bitacora_pelicula
+
+select * from tbl_bitacora_pelicula_actor
+select bit_pel_act_id_bitacora_pelicula_actor,bit_pel_act_usuario,bit_pel_act_pelicula_actor,bit_pel_act_accion,bit_pel_act_fecha_accion from tbl_bitacora_pelicula_actor
+
+select * from tbl_bitacora_pelicula_director
+select bit_pel_dir_id_bitacora_pelicula_director,bit_pel_dir_usuario,bit_pel_dir_pelicula_director,bit_pel_dir_accion,bit_pel_dir_fecha_accion from tbl_bitacora_pelicula_director
+
+select * from tbl_bitacora_pelicula_genero
+select bit_pel_gen_id_bitacora_pelicula_genero,bit_pel_gen_usuario,bit_pel_gen_pelicula_genero,bit_pel_gen_accion,bit_pel_gen_fecha_accion from tbl_bitacora_pelicula_genero
+
+select * from tbl_bitacora_pelicula_productora
+select bit_pel_prod_id_bitacora_pelicula_productora,bit_pel_prod_usuario,bit_pel_prod_pelicula_productora,bit_pel_prod_accion,bit_pel_prod_fecha_accion from tbl_bitacora_pelicula_productora
+
+select * from tbl_bitacora_prestamo
+select bit_pres_id_bitacora_prestamo,bit_pres_usuario,bit_pres_prestamo,bit_pres_accion,bit_pres_fecha_accion from tbl_bitacora_prestamo
+
+select * from tbl_bitacora_productora
+select bit_prod_id_bitacora_productora,bit_prod_usuario,bit_prod_productora,bit_prod_accion,bit_prod_fecha_accion from tbl_bitacora_productora
+
+select * from tbl_bitacora_registro_prestamos
+select bit_reg_cin_id_bitacora_devolucion_cinta,bit_reg_cin_usuario,bit_reg_cin_registro_prestamos,bit_reg_cin_accion,bit_reg_cin_fecha_accion from tbl_bitacora_registro_prestamos
+
+select * from tbl_bitacora_rol
+select bit_rol_id_bitacora_rol,bit_rol_usuario,bit_rol_rol,bit_rol_accion,bit_rol_fecha_accion from tbl_bitacora_rol
+
+select * from tbl_bitacora_socio
+select bit_soc_id_bitacora_socio,bit_soc_usuario,bit_soc_socio,bit_soc_accion,bit_soc_fecha_accion from tbl_bitacora_socio
+
+select * from tbl_bitacora_socio_actor
+select bit_soc_act_id_bitacora_socio_actor,bit_soc_act_usuario,bit_soc_act_socio_actor,bit_soc_act_accion,bit_soc_act_fecha_accion from tbl_bitacora_socio_actor
+
+select * from tbl_bitacora_socio_director
+select bit_soc_dir_id_bitacora_socio_director,bit_soc_dir_usuario,bit_soc_dir_socio_director,bit_soc_dir_accion,bit_soc_dir_fecha_accion from tbl_bitacora_socio_director
+
+select * from tbl_bitacora_socio_genero
+select bit_soc_gen_id_bitacora_socio_genero,bit_soc_gen_usuario,bit_soc_gen_socio_genero,bit_soc_gen_accion,bit_soc_gen_fecha_accion from tbl_bitacora_socio_genero
+
+select * from tbl_bitacora_subtitulos_cinta
+select bit_sub_id_bitacora_subtitulos_cinta,bit_sub_usuario,bit_sub_subtitulos_cinta,bit_sub_accion,bit_sub_fecha_accion from tbl_bitacora_subtitulos_cinta
+
+select * from tbl_bitacora_usuario
+select bit_user_id_bitacora_usuario,bit_user_usuario,bit_user_usuario_id,bit_user_accion,bit_user_fecha_accion from tbl_bitacora_usuario
