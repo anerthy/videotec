@@ -30,6 +30,13 @@ select CONVERT(varchar,DATEDIFF(day,'2022-11-01',GETDATE())) + ' dias' as [Plazo
 -- peliculas en lista de espera
 select COUNT(list_id_lista_espera) from tbl_lista_espera
 
+--logins
+select s.soc_correo,u.user_contraseña from tbl_usuario u
+inner join tbl_socio_usuario sa
+on u.user_id_usuario = sa.soc_user_usuario_id
+inner join tbl_socio s
+on s.soc_codigo_socio = sa.soc_user_codigo_socio
+
 -- BORRAR MAS DE UN REGISTRO A LA VEZ SIN QUE DE ERROR EL TRIGGER
 --while (exists (select * from tbl_socio where soc_codigo_socio <> '02C2D8D75F8A'))
 --begin
@@ -37,6 +44,3 @@ select COUNT(list_id_lista_espera) from tbl_lista_espera
 --	set @codigo = (select top 1 soc_codigo_socio from tbl_socio where soc_codigo_socio <> '02C2D8D75F8A')
 --	delete from tbl_socio where soc_codigo_socio = @codigo
 --end
-
-select soc_cedula,soc_correo,soc_foto_perfil from tbl_socio
-select user_nombre,user_correo,user_contraseña,user_rol_id,user_foto from tbl_usuario
