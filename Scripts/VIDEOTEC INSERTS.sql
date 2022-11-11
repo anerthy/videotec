@@ -1,5 +1,11 @@
 USE VIDEOTEC
+go
+exec sp_insert_tbl_rol 'VIDEOTEC-SA','Rol de super administrador del sistema'
+exec sp_insert_tbl_rol 'Administrador','Tiene acceso a todo el sistema'
+exec sp_insert_tbl_rol 'Socio','Rol de socio. Puede realizar prestamos de peliculas'
+
 exec sp_insert_tbl_socio '114260441','Andres','Mejias','Gonzalez','andmejigo@gmail.com','87293508','50201','25m de la escuela Cerro Azul','Femenino','1989-11-08','foto_perfil'
+
 exec sp_insert_tbl_socio_tbl_usuario '420562302', 'Melony', 'Jager', 'Skidmore', 'mskidmore0@eventbrite.com', '5259081849', '18682', '7849 Express Plaza', 'No Binario', '1963-02-15', 'http://dummyimage.com/115x100.png/cc0000/ffffff', 'KLeNH4k0' 
 exec sp_insert_tbl_socio_tbl_usuario '734534697', 'Andrej', 'Dovington', 'Quimby', 'aquimby1@chron.com', '4548497047', '81116', '94322 Warbler Pass', 'Masculino', '1968-07-22', 'http://dummyimage.com/142x100.png/dddddd/000000', 'O3mIQkqc' 
 exec sp_insert_tbl_socio_tbl_usuario '868491507', 'Kally', 'Riach', 'Notti', 'knotti2@feedburner.com', '1921515368', '30944', '022 Stoughton Parkway', 'Masculino', '1955-02-15', 'http://dummyimage.com/102x100.png/ff4444/ffffff', 'OD5jpI' 
@@ -3003,82 +3009,46 @@ exec sp_insert_tbl_socio_tbl_usuario '571315675', 'Tadeo', 'Christoforou', 'Roge
  exec sp_insert_tbl_socio_tbl_usuario '948813732', 'Thain', 'Odgers', 'Cuseick', 'tcuseickrr@icq.com', '4651834141', '74432', '139 Lakewood Gardens Hill', 'No Binario', '1991-05-30', 'http://dummyimage.com/143x100.png/5fa2dd/ffffff', 'JylK4IAkCOKM' 
 
 
-exec sp_insert_tbl_rol 'VIDEOTEC-SA','Rol de super administrador del sistema'
-exec sp_insert_tbl_rol 'Administrador','Tiene acceso a todo el sistema'
-exec sp_insert_tbl_rol 'Socio','Rol de socio. Puede realizar prestamos de peliculas'
+insert into tbl_clasificacion (clasf_simbolo,clasf_nombre,clasf_significado) values
+('G','General Audiences','Admitido para todas las edades. Nada que pudiera ofender a los padres si lo vieran sus hijos.'),
+('PG','Parental Guidance Suggested','Algunos contenidos pueden no ser apropiados para niños. Puede contener algunas imágenes que podrían no gustar a los padres para sus hijos jóvenes.'),
+('PG-13','Parents Strongly Cautioned','Algunos materiales pueden ser inapropiados para niños menores de 13 años. Los padres deben ser cautelosos. Puede ser inapropiado para pre-adolescentes.'),
+('R','Restricted','Personas de menos de 17 años requieren acompañamiento de un adulto. Contienen algunos materiales para adultos. Los padres deben informarse sobre la película antes de llevar a sus hijos a verla.'),
+('NC-17','Adults Only','Nadie menor de 17 años. Solamente adultos. No se admiten niños.'),
+('E','Exento de clasificación','Aún no clasificado, generalmente material educativo')
 
---select * from tbl_pelicula
---update tbl_pelicula set pel_stock_cintas = 2 where pel_id_pelicula = '1232133'
+insert into tbl_idioma(idm_id_idioma,idm_nombre) values ('ES','Español')
+insert into tbl_idioma(idm_id_idioma,idm_nombre) values ('EN','Ingles')
+insert into tbl_idioma(idm_id_idioma,idm_nombre) values ('FR','Francés')
+insert into tbl_idioma(idm_id_idioma,idm_nombre) values ('JA','Japonés')
+insert into tbl_idioma(idm_id_idioma,idm_nombre) values ('KO','Coreano')
+insert into tbl_idioma(idm_id_idioma,idm_nombre) values ('LA','Latin')
+insert into tbl_idioma(idm_id_idioma,idm_nombre) values ('DE','Aleman')
 
---select * from tbl_idioma
---insert into tbl_idioma values ('ESP','ESPAÑOL'),('ENG','INGLES')
+exec sp_insert_tbl_pelicula 'Black Panther: Wakanda Forever','TChalla, rey de Wakanda, muere de una enfermedad que su hermana Shuri cree que podría haber sido curada por la "hierba en forma de corazón". Shuri ha estado intentando recrear sintéticamente la hierba después de que Killmonger la destruyera, pero no tiene éxito.','PG','02:41',2022,'Estados Unidos',6.65,'NULL','NULL' 
 
---insert into tbl_cinta values ('145','ESP','1232133','Prestada')
---select * from tbl_cinta
+exec sp_insert_tbl_director 'Ryan Coogler','Ryan Kyle Coogler','Estadounidense','Ryan Kyle Coogler es un director y guionista estadounidense. Es conocido en la industria por su trabajo como director de las películas Creed y Black Panther.','1986-05-23','https://commons.wikimedia.org/wiki/File:Ryan_Coogler_(35852210920).jpg'
 
---delete from tbl_cinta where cin_numero_cinta = '145'
+exec sp_insert_tbl_actor 'Letitia Wright','Letitia Michelle Wright','Británica y guyanesa','Letitia Michelle Wright (Georgetown, 31 de octubre de 1993) es una actriz guyanesa-británica. Comenzó su carrera con papeles como invitada en las series de televisión Top Boy, Coming Up, Chasing Shadows, Humans, Doctor Who, y Black Mirror. Por esta última, recibió una nominación al Primetime Emmy Award.',2011,'1993-10-31','Actriz','https://commons.wikimedia.org/wiki/File:Letitia_Wright_by_Gage_Skidmore.jpg'
 
-----------------
+exec sp_insert_tbl_pelicula_actor 1,'Principal',AEB6CC0E
 
---insert into tbl_pelicula (pel_id_pelicula,pel_titulo,pel_sinopsis,pel_clasificacion,pel_duracion,pel_año_publicacion,pel_pais,pel_precio,pel_portada,pel_trailer)
---values ('123456','Avengers','lonja venjers',1,'01:45',2021,'USA',$2.5,'PORTADA','TRAILEEER')
---select * from tbl_pelicula
+exec sp_insert_tbl_productora 'Walt Disney Studios Motion Pictures',1953,'Walt Disney Studios Motion Pictures es una compañía estadounidense de distribución de películas y series de televisión, división de Walt Disney Studios y propiedad de The Walt Disney Company.','https://www.disneystudios.com','https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Walt_Disney_Studios_Motion_Pictures_logo.svg/368px-Walt_Disney_Studios_Motion_Pictures_logo.svg.png'
 
---------------------
+exec sp_insert_tbl_pelicula_productora 1,AEB6CC0E
 
---insert into tbl_prestamo values ('2022-10-29 21:00','2022-11-4 13:00','163EAD281D0E',$20)
---insert into tbl_detalle_prestamo values (1,'12',$4)
---select * from tbl_prestamo
---select * from tbl_socio
---select * from tbl_detalle_prestamo
---select * from tbl_cinta
---update tbl_cinta set cin_estado = 'Disponible' where cin_numero_cinta = '12' 
-
------------
-
---select * from tbl_devolucion_cinta
-
--- -- -- -- -- -- -- 
-
---exec sp_insert_tbl_detalle_prestamo 1,'C0EF25B5-288A'
---exec sp_update_tbl_detalle_prestamo 1,1,'12'
---exec sp_delete_tbl_detalle_prestamo 1
---exec sp_select_tbl_detalle_prestamo 3
---exec sp_select_all_tbl_detalle_prestamo
---select * from tbl_detalle_prestamo
---exec sp_insert_tbl_pelicula 'Moana','una piba en el awa','1','01:45','2017','USA','$4','Portada','trialer'
---select * from tbl_pelicula
---exec sp_update_tbl_pelicula 'C0EF25B5','Moana 2','una piba en el awa','1','01:45','2017','USA','$4','Portada','trialer'
---select * from tbl_pelicula
---exec sp_select_tbl_pelicula 'C0EF25B5'
---exec sp_delete_tbl_pelicula 'BA168726'
---exec sp_select_all_tbl_pelicula
---select soc_codigo_socio,soc_cedula,soc_nombre,soc_apellido1,soc_apellido2,soc_correo,soc_telefono,
---soc_codigo_postal, soc_direccion_exacta, soc_genero, soc_fecha_nacimiento, soc_foto_perfil 
---from tbl_socio
+exec sp_insert_tbl_genero_pelicula 'Accion','El llamado cine de acción es un género cinematográfico donde prima la espectacularidad de las imágenes por medio de efectos especiales de estilo "clásico". La denominación es más un convencionalismo popular, que un género cinematográfico puro acuñado por críticos, estudiosos o cineastas. Los elementos más frecuentes de una película de acción son persecuciones (tanto a pie como con vehículos), tiroteos, enfrentamientos, artes marciales y luchas callejeras, armas, explosiones, agresiones y cualquier situación violenta o intensa.','https://commons.wikimedia.org/wiki/File:John_Rambo.jpg'
+exec sp_insert_tbl_genero_pelicula 'Ciencia ficcion','se basa en un futuro cercano o muy lejano, donde se logra ver le avance de le tecnología y como ejecuta este en le historia.','https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Amazing_Stories%2C_April_1926._Volume_1%2C_Number_1.jpg/462px-Amazing_Stories%2C_April_1926._Volume_1%2C_Number_1.jpg'
+exec sp_insert_tbl_genero_pelicula 'Comedia','películas realizadas con la intención de provocar humor, divertimiento, entretenimiento y/o risa en el espectador.','https://upload.wikimedia.org/wikipedia/commons/f/f8/Gentlemen_Prefer_Blondes_Movie_Trailer_Screenshot_%2816%29.jpg'
+exec sp_insert_tbl_genero_pelicula 'Drama','en le cine, películas que se centran principalmente en el desarrollo de una lid entre los protagonistas, o del protagonista con su entorno o consigo mismo.','https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Gone_With_The_Wind_1967_re-release.jpg/406px-Gone_With_The_Wind_1967_re-release.jpg'
+exec sp_insert_tbl_genero_pelicula 'Fantasia','lo contrario a le ciencia ficción. Le inexistencia de le tecnología nos da a entender que acaece en un tiempo pasado. La magia, les animales mitológicos o sucesos sin una explicación lógica forman parte de este mundo.','https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/The_Enchanted_Garden_of_Messer_Ansaldo_by_Marie_Spartali_Stillman_%281889%29.jpg/640px-The_Enchanted_Garden_of_Messer_Ansaldo_by_Marie_Spartali_Stillman_%281889%29.jpg'
+exec sp_insert_tbl_genero_pelicula 'Melodrama','tiene una carga emocional o moral muy fuerte o emotiva, atendiendo al gusto de cada persona.','https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Honor%C3%A9_Daumier_026.jpg/580px-Honor%C3%A9_Daumier_026.jpg'
+exec sp_insert_tbl_genero_pelicula 'Musical','contienen interrupciones en su desarrollo, para dar un breve receso por medio de un fragmento musical cantado o acompañados de una coreografía.','https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/The_Jazz_Singer_1927_Poster.jpg/470px-The_Jazz_Singer_1927_Poster.jpg'
+exec sp_insert_tbl_genero_pelicula 'Romance','un desenvolvimiento romántico, cariñoso o amoroso entre dos personas.','https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Poster_-_Gone_With_the_Wind_01.jpg/416px-Poster_-_Gone_With_the_Wind_01.jpg'
+exec sp_insert_tbl_genero_pelicula 'Suspenso','realizadas con la intención de provocar tensión en el espectador. También suele utilizarse la palabra thriller para designar películas de este tipo, aunque hay sutiles diferencias.','https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Alfred_Hitchcock%27s_Marnie_Trailer_-_Alfred_Hitchcock.png/640px-Alfred_Hitchcock%27s_Marnie_Trailer_-_Alfred_Hitchcock.png'
+exec sp_insert_tbl_genero_pelicula 'Terror','realizadas con la intención de provocar pavor, tensión, miedo y/o el sobresalto en la audiencia.','https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Freddy_Cosplay.jpg/426px-Freddy_Cosplay.jpg'
+exec sp_insert_tbl_genero_pelicula 'Documental','Hace referencia a temas de interés científico, social o cultural, entre otros.',''
 
 
---exec sp_insert_tbl_cinta 'ESP','C0EF25B5'
---select * from tbl_cinta
---exec sp_update_tbl_cinta 'C0EF25B5-C994','ENG','EB6C9F14'
---select * from tbl_pelicula
---exec sp_delete_tbl_cinta 'C0EF25B5-6259'
+exec sp_insert_tbl_pelicula_genero 1,AEB6CC0E
 
---exec sp_insert_tbl_socio '504460444','Andres','Mejias','Gonzalez','andmejigo@gmail.com','87293508','50201','25m de la escuela Cerro Azul','Masculino','2022-11-08','foto_perfil'
---exec sp_update_tbl_socio '123456123456','504460444','PEPE','Mejias','Gonzalez','anfmu123ego@gmail.com','129101831','50201','en la casa','Masculino','2022-11-08','foto_re_facha'
---exec sp_select_tbl_socio '163EAD281D0E'
---exec sp_select_all_tbl_socio
---exec sp_delete_tbl_socio '123456123456'
-
---select * from tbl_pelicula
---exec sp_insert_tbl_detalle_prestamo 1,'C0EF25B5'
---select * from tbl_detalle_prestamo
-
---exec sp_insert_tbl_carrito_compra 'C0EF25B5','163EAD281D0E'
---exec sp_insert_tbl_carrito_compra 'C0EF25B5','163EAD281D0E'
---exec sp_update_tbl_carrito_compra 1,'EB6C9F14','163EAD281D0E'
---exec sp_select_all_tbl_carrito_compra
---sp_select_tbl_carrito_compra 2
---exec sp_delete_tbl_carrito_compra 3
---select * from tbl_carrito_compra
---select * from tbl_pelicula
