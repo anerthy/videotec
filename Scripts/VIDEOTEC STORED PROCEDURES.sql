@@ -2310,6 +2310,114 @@ BEGIN
 END
 GO
 
+-- =============================================
+-- Author:		<Andrés>
+-- Create date: <2022/11/10>
+-- Description:	<sp para insertar un registro en la tabla tbl_socio_usuario>
+-- =============================================
+USE VIDEOTEC
+GO
+CREATE PROCEDURE sp_insert_tbl_socio_usuario 
+( 
+	@soc_user_codigo_socio varchar(12),
+	@soc_user_usuario_id int
+)
+AS
+BEGIN
+	insert into tbl_socio_usuario(soc_user_codigo_socio,soc_user_usuario_id) 
+	values (@soc_user_codigo_socio,@soc_user_usuario_id)
+END
+GO
+
+-- =============================================
+-- Author:		<Andrés>
+-- Create date: <2022/11/10>
+-- Description:	<sp para actualizar un registro de la tabla tbl_socio_usuario>
+-- =============================================
+USE VIDEOTEC
+GO
+CREATE PROCEDURE sp_update_tbl_socio_usuario 
+(
+	@soc_user_id_socio_usuario int,
+	@soc_user_codigo_socio varchar(12),
+	@soc_user_usuario_id int
+)
+AS
+BEGIN
+    
+	update tbl_socio_usuario set 
+	soc_user_codigo_socio = @soc_user_codigo_socio,
+	soc_user_usuario_id = @soc_user_usuario_id
+	where @soc_user_id_socio_usuario = @soc_user_id_socio_usuario
+
+END
+GO
+
+-- =============================================
+-- Author:		<Andrés>
+-- Create date: <2022/11/10>
+-- Description:	<sp para eliminar un registro de tbl_socio_usuario>
+-- =============================================
+USE VIDEOTEC
+GO
+CREATE PROCEDURE sp_delete_tbl_socio_usuario
+( 
+	@soc_user_id_socio_usuario int
+)
+AS
+BEGIN
+    
+	delete from tbl_socio_usuario
+	where soc_user_id_socio_usuario = @soc_user_id_socio_usuario
+
+END
+GO
+
+-- =============================================
+-- Author:		<Andrés>
+-- Create date: <2022/11/10>
+-- Description:	<sp para seleccionar todos los registros de la tabla tbl_empresa>
+-- =============================================
+USE VIDEOTEC
+GO
+CREATE PROCEDURE sp_select_all_tbl_socio_usuario
+AS
+BEGIN
+
+	select 
+	soc_user_id_socio_usuario,
+	soc_user_codigo_socio,
+	soc_user_usuario_id
+	from tbl_socio_usuario
+
+END
+GO
+
+-- =============================================
+-- Author:		<Andrés>
+-- Create date: <2022/11/10>
+-- Description:	<sp para seleccionar todos los campos de un registro de tbl_socio_usuario por el id>
+-- =============================================
+USE VIDEOTEC
+GO
+CREATE PROCEDURE sp_select_tbl_socio_usuario 
+(
+	@soc_user_id_socio_usuario int
+)
+AS
+BEGIN
+
+	select 
+	soc_user_id_socio_usuario,
+	soc_user_codigo_socio,
+	soc_user_usuario_id
+	from tbl_socio_usuario
+	where soc_user_id_socio_usuario = @soc_user_id_socio_usuario
+
+END
+GO
+
+
 ---------------
 -- SOFIA
 ---------------
@@ -2783,6 +2891,44 @@ BEGIN
     soc_act_actor_id 
 	from tbl_socio_actor
 	where  soc_act_id_socio_actor= @soc_act_id_socio_actor
+
+END
+GO
+
+-- =============================================
+-- Author:		<Andrés>
+-- Create date: <2022/11/10>
+-- Description:	<sp para insertar un registro en las tablas tbl_socio, tbl_usuario, tbl_socio_usuario>
+-- =============================================
+USE VIDEOTEC
+GO
+CREATE PROCEDURE sp_insert_tbl_socio_tbl_usuario
+( 
+	@soc_cedula varchar(9),
+	@soc_nombre varchar(35),
+	@soc_apellido1 varchar(40),
+	@soc_apellido2 varchar(40),
+	@soc_correo varchar(50),
+	@soc_telefono varchar(8),
+	@soc_codigo_postal varchar(5),
+	@soc_direccion_exacta varchar(100),
+	@soc_genero varchar(10),
+	@soc_fecha_nacimiento date,
+	@soc_foto_perfil varchar(50),
+	@user_contraseña varchar(75)
+)
+AS
+BEGIN
+
+	declare @soc_user_codigo_socio varchar(12), @soc_user_usuario_id int
+
+	exec sp_insert_tbl_socio @soc_cedula,@soc_nombre,@soc_apellido1,@soc_apellido2,@soc_correo,@soc_telefono,@soc_codigo_postal,@soc_direccion_exacta,@soc_genero,@soc_fecha_nacimiento,@soc_foto_perfil	
+	set @soc_user_codigo_socio = (select bit_soc_socio from tbl_bitacora_socio where bit_soc_fecha_accion = (select max(bit_soc_fecha_accion) from tbl_bitacora_socio))
+
+	exec sp_insert_tbl_usuario @soc_cedula,@soc_correo,@user_contraseña,3,@soc_foto_perfil
+	set @soc_user_usuario_id = (select bit_user_usuario_id from tbl_bitacora_usuario where bit_user_fecha_accion = (select max(bit_user_fecha_accion) from tbl_bitacora_usuario))
+
+	exec sp_insert_tbl_socio_usuario @soc_user_codigo_socio,@soc_user_usuario_id
 
 END
 GO

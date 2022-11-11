@@ -461,6 +461,23 @@ foreign key (del_cin_codigo_socio) references tbl_socio(soc_codigo_socio)
 ON PRESTAMOS
 go
 
+USE VIDEOTEC
+GO
+create table tbl_socio_usuario
+(
+soc_user_id_socio_usuario int identity(1,1) not null,
+soc_user_codigo_socio varchar(12) not null,
+soc_user_usuario_id int not null
+constraint PK_tbl_socio_usuario
+primary key clustered (soc_user_id_socio_usuario)
+constraint FK_soc_user_codigo_socio
+foreign key (soc_user_codigo_socio) references tbl_socio(soc_codigo_socio),
+constraint FK_soc_user_usuario_id
+foreign key (soc_user_usuario_id) references tbl_usuario(user_id_usuario)
+)
+ON SOCIOS
+go
+
 -----------------------
 -- TABLAS DE BITACORA
 -----------------------
@@ -866,6 +883,21 @@ bit_reg_cin_accion varchar(6) not null check (bit_reg_cin_accion in ('INSERT','U
 bit_reg_cin_fecha_accion datetime not null default getdate()
 constraint PK_tbl_bitacora_registro_prestamos
 primary key clustered (bit_reg_cin_id_bitacora_devolucion_cinta)
+)
+ON BITACORAS
+go
+
+use VIDEOTEC
+go
+create table tbl_bitacora_socio_usuario
+(
+bit_soc_user_id_bitacora_socio_usuario int identity not null,
+bit_soc_user_usuario varchar(30) not null default current_user,
+bit_soc_user_socio_usuario int not null,
+bit_soc_user_accion varchar(6) not null check (bit_soc_user_accion in ('INSERT','UPDATE','DELETE')),
+bit_soc_user_fecha_accion datetime not null default getdate()
+constraint PK_tbl_bitacora_socio_usuario
+primary key clustered (bit_soc_user_id_bitacora_socio_usuario)
 )
 ON BITACORAS
 go

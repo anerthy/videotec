@@ -1678,3 +1678,62 @@ AS
 	END
 GO
 
+-- =============================================
+-- Author:		<Andrés>
+-- Create date: <2022/11/10>
+-- Description:	<trigger que registra los inserts que se realizan en la tabla tbl_socio_usuario>
+-- =============================================
+USE VIDEOTEC
+GO
+create trigger tr_insert_bitacora_soc_user
+on tbl_socio_usuario
+AFTER INSERT
+AS
+	BEGIN
+		declare @bit_soc_user_socio_usuario int
+		set @bit_soc_user_socio_usuario = (select soc_user_id_socio_usuario from inserted)
+
+		insert into tbl_bitacora_socio_usuario(bit_soc_user_socio_usuario,bit_soc_user_accion)
+		values(@bit_soc_user_socio_usuario,'INSERT')	
+	END
+GO
+
+-- =============================================
+-- Author:		<Andrés>
+-- Create date: <2022/11/10>
+-- Description:	<trigger que registra las actualizaciones que se realizan en la tabla tbl_socio_usuario>
+-- =============================================
+USE VIDEOTEC
+GO
+create trigger tr_update_bitacora_soc_user
+on tbl_socio_usuario
+AFTER UPDATE
+AS
+	BEGIN
+		declare @bit_soc_user_socio_usuario int
+		set @bit_soc_user_socio_usuario = (select soc_user_id_socio_usuario from inserted)
+
+		insert into tbl_bitacora_socio_usuario(bit_soc_user_socio_usuario,bit_soc_user_accion)
+		values(@bit_soc_user_socio_usuario,'UPDATE')	
+	END
+GO
+
+-- =============================================
+-- Author:		<Andrés>
+-- Create date: <2022/11/10>
+-- Description:	<trigger que registra el eliminado de registros que se realizan en la tabla tbl_socio_usuario>
+-- =============================================
+USE VIDEOTEC
+GO
+create TRIGGER tr_delete_bitacora_soc_user
+on tbl_socio_usuario
+AFTER DELETE
+AS
+	BEGIN
+		declare @bit_soc_user_socio_usuario int
+		set @bit_soc_user_socio_usuario = (select soc_user_id_socio_usuario from deleted)
+
+		insert into tbl_bitacora_socio_usuario(bit_soc_user_socio_usuario,bit_soc_user_accion)
+		values(@bit_soc_user_socio_usuario,'DELETE')
+	END
+GO
