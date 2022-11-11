@@ -1,0 +1,4 @@
+Login a la base de datos
+ANERTHY\SQLEXPRESS
+videotec-user
+HN2t81ywEDm
