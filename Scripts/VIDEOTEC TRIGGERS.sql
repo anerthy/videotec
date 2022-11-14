@@ -98,19 +98,59 @@ GO
 -- =============================================
 USE VIDEOTEC
 GO
-create trigger tr_calcular_precio_total
+create trigger tr_calcular_precio_total_01
 on tbl_detalle_prestamo
-AFTER INSERT, DELETE
+AFTER INSERT, UPDATE
 AS
 	BEGIN
-		declare @prestamo int,@prestamo2 int, @precio money
+		declare @prestamo int, @precio money = 0
 		
 		set @prestamo = (select det_pres_prestamo_id from inserted)
-		set @prestamo2 = (select det_pres_prestamo_id from deleted)
 
-		set @precio = (select sum(det_pres_sub_total) from tbl_detalle_prestamo where det_pres_prestamo_id in (@prestamo,@prestamo2))
+		set @precio = (select sum(det_pres_sub_total) from tbl_detalle_prestamo where det_pres_prestamo_id = @prestamo)
+		update tbl_prestamo set pres_precio_total = @precio where pres_id_prestamo = @prestamo
+	END
+GO
 
-		update tbl_prestamo set pres_precio_total = @precio where pres_id_prestamo in  (@prestamo,@prestamo2)
+USE VIDEOTEC
+GO
+create trigger tr_calcular_precio_total_02
+on tbl_detalle_prestamo
+AFTER DELETE
+AS
+	BEGIN
+		declare @prestamo int, @precio money = 0
+		
+		set @prestamo = (select det_pres_prestamo_id from deleted)
+
+		set @precio = (select det_pres_sub_total from deleted)
+		update tbl_prestamo set pres_precio_total = (pres_precio_total - @precio) where pres_id_prestamo = @prestamo
+	END
+GO
+
+-- =============================================
+-- Author:		<Andrés>
+-- Create date: <2022/11/12>
+-- Description:	<trigger que registra los inserts que se realizan en la tabla tbl_detalle_prestamo>
+-- =============================================
+USE VIDEOTEC
+GO
+create trigger tr_insert_registro_prestamo
+on tbl_detalle_prestamo
+AFTER INSERT
+AS
+	BEGIN
+		declare @reg_pres_numero_cinta varchar(13),
+		@reg_pres_codigo_socio varchar(12),
+		@reg_pres_fecha_prestamo datetime,
+		@reg_pres_fecha_devolucion datetime
+
+		set @reg_pres_numero_cinta = (select det_pres_numero_cinta from inserted)
+		set @reg_pres_codigo_socio = (select pres_codigo_socio from inserted inner join tbl_prestamo on det_pres_prestamo_id = pres_id_prestamo)
+		set @reg_pres_fecha_prestamo = (select pres_fecha_prestamo from inserted inner join tbl_prestamo on det_pres_prestamo_id = pres_id_prestamo)
+		set @reg_pres_fecha_devolucion = (select pres_fecha_devolucion from inserted inner join tbl_prestamo on det_pres_prestamo_id = pres_id_prestamo)
+
+		exec sp_insert_tbl_registro_prestamos @reg_pres_numero_cinta,@reg_pres_codigo_socio,@reg_pres_fecha_prestamo,@reg_pres_fecha_devolucion
 	END
 GO
 

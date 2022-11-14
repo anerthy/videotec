@@ -98,7 +98,7 @@ GO
 create table tbl_pelicula
 (
 pel_id_pelicula varchar(8) not null,
-pel_titulo varchar(10) not null,
+pel_titulo varchar(100) not null,
 pel_sinopsis text not null,
 pel_clasificacion varchar(5) not null,
 pel_duracion time not null,
@@ -107,8 +107,8 @@ pel_stock_cintas int not null default 0,
 pel_pais varchar(20) not null,
 pel_precio money not null,
 pel_disponibilidad varchar(13) not null check (pel_disponibilidad in ('No disponible','Disponible')) default 'No disponible',
-pel_portada varchar(50) not null,
-pel_trailer varchar(50) not null
+pel_portada varchar(100) null,
+pel_trailer varchar(100) null
 constraint PK_tbl_pelicula
 primary key clustered (pel_id_pelicula)
 constraint FK_pelicula_clasificacion

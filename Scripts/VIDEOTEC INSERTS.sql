@@ -3025,10 +3025,6 @@ insert into tbl_idioma(idm_id_idioma,idm_nombre) values ('KO','Coreano')
 insert into tbl_idioma(idm_id_idioma,idm_nombre) values ('LA','Latin')
 insert into tbl_idioma(idm_id_idioma,idm_nombre) values ('DE','Aleman')
 
-exec sp_insert_tbl_pelicula 'Black Panther: Wakanda Forever','TChalla, rey de Wakanda, muere de una enfermedad que su hermana Shuri cree que podría haber sido curada por la "hierba en forma de corazón". Shuri ha estado intentando recrear sintéticamente la hierba después de que Killmonger la destruyera, pero no tiene éxito.','PG','02:41',2022,'Estados Unidos',6.65,'NULL','NULL' 
-
-exec sp_insert_tbl_director 'Ryan Coogler','Ryan Kyle Coogler','Estadounidense','Ryan Kyle Coogler es un director y guionista estadounidense. Es conocido en la industria por su trabajo como director de las películas Creed y Black Panther.','1986-05-23','https://commons.wikimedia.org/wiki/File:Ryan_Coogler_(35852210920).jpg'
-
 exec sp_insert_tbl_actor 'Letitia Wright','Letitia Michelle Wright','Británica y guyanesa','Letitia Michelle Wright (Georgetown, 31 de octubre de 1993) es una actriz guyanesa-británica. Comenzó su carrera con papeles como invitada en las series de televisión Top Boy, Coming Up, Chasing Shadows, Humans, Doctor Who, y Black Mirror. Por esta última, recibió una nominación al Primetime Emmy Award.',2011,'1993-10-31','Actriz','https://commons.wikimedia.org/wiki/File:Letitia_Wright_by_Gage_Skidmore.jpg'
 
 exec sp_insert_tbl_pelicula_actor 1,'Principal',AEB6CC0E
@@ -3048,7 +3044,14 @@ exec sp_insert_tbl_genero_pelicula 'Romance','un desenvolvimiento romántico, car
 exec sp_insert_tbl_genero_pelicula 'Suspenso','realizadas con la intención de provocar tensión en el espectador. También suele utilizarse la palabra thriller para designar películas de este tipo, aunque hay sutiles diferencias.','https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Alfred_Hitchcock%27s_Marnie_Trailer_-_Alfred_Hitchcock.png/640px-Alfred_Hitchcock%27s_Marnie_Trailer_-_Alfred_Hitchcock.png'
 exec sp_insert_tbl_genero_pelicula 'Terror','realizadas con la intención de provocar pavor, tensión, miedo y/o el sobresalto en la audiencia.','https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Freddy_Cosplay.jpg/426px-Freddy_Cosplay.jpg'
 exec sp_insert_tbl_genero_pelicula 'Documental','Hace referencia a temas de interés científico, social o cultural, entre otros.',''
+exec sp_insert_tbl_genero_pelicula 'Animacion','El cine de animación es una categoría de cine (o de una manera general, una categoría de arte visual o audiovisual) que se caracteriza por no recurrir a la técnica del rodaje de imágenes reales sino a una o más técnicas de animación. Las técnicas tradicionales de animación han sido durante mucho tiempo el dibujo animado (dibujos planos en dos dimensiones fotografiados imagen por imagen) o la animación en volumen (modelos reducidos o marionetas, también fotografiados imagen por imagen), aunque en tiempos más recientes también se recurre a la animación por computadora.','NULL'
 
 
 exec sp_insert_tbl_pelicula_genero 1,AEB6CC0E
 
+exec sp_insert_tbl_carrito_compra 'AEB6CC0E','0009D9AC24D2'
+exec sp_insert_tbl_detalle_prestamo 4,'AEB6CC0E'
+exec sp_insert_tbl_detalle_prestamo 4,'AEB6CC0E'
+
+insert into tbl_prestamo (pres_fecha_prestamo,pres_fecha_devolucion,pres_codigo_socio) values ((convert(datetime,'18-06-12 10:34:09 PM',5)),(convert(datetime,'18-06-12 10:34:09 PM',5)),'0009D9AC24D2')
+insert into tbl_prestamo (pres_fecha_prestamo,pres_fecha_devolucion,pres_codigo_socio) values ((convert(datetime,'11-11-22 10:34:09 PM',5)),(convert(datetime,'18-11-22 10:34:09 PM',5)),'0009D9AC24D2') 

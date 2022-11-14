@@ -258,15 +258,15 @@ GO
 USE VIDEOTEC
 GO
 CREATE PROCEDURE sp_insert_tbl_pelicula ( 
-	@pel_titulo varchar(10),
+	@pel_titulo varchar(100),
 	@pel_sinopsis text,
 	@pel_clasificacion varchar(5),
 	@pel_duracion time,
 	@pel_año_publicacion int,
 	@pel_pais varchar(20),
 	@pel_precio money,
-	@pel_portada varchar(50),
-	@pel_trailer varchar(50)
+	@pel_portada varchar(100),
+	@pel_trailer varchar(100)
 	)
 AS
 BEGIN
@@ -1245,13 +1245,12 @@ CREATE PROCEDURE sp_insert_tbl_prestamo
 ( 
 @pres_fecha_prestamo datetime,
 @pres_fecha_devolucion datetime,
-@pres_codigo_socio varchar(12),
-@pres_precio_total money
+@pres_codigo_socio varchar(12)
 )
 AS
 BEGIN
-	insert into tbl_prestamo (pres_fecha_prestamo,pres_fecha_devolucion,pres_codigo_socio,pres_precio_total) 
-	values (@pres_fecha_prestamo,@pres_fecha_devolucion,@pres_codigo_socio,@pres_precio_total) 
+	insert into tbl_prestamo (pres_fecha_prestamo,pres_fecha_devolucion,pres_codigo_socio) 
+	values (@pres_fecha_prestamo,@pres_fecha_devolucion,@pres_codigo_socio) 
 END
 GO
 
@@ -1357,7 +1356,7 @@ USE VIDEOTEC
 GO
 CREATE PROCEDURE sp_insert_tbl_pelicula_director 
 	( 
-	@pel_dir_pelicula_id varchar(15),
+	@pel_dir_pelicula_id varchar(8),
 	@pel_dir_director_id int
 	)
 AS
@@ -2932,3 +2931,40 @@ BEGIN
 
 END
 GO
+
+use VIDEOTEC
+go
+create proc sp_insert_pelicula 
+(
+	@pel_titulo varchar(100),
+	@pel_sinopsis text,
+	@pel_clasificacion varchar(5),
+	@pel_duracion time,
+	@pel_año_publicacion int,
+	@pel_pais varchar(20),
+	@pel_precio money,
+	@pel_portada varchar(100),
+	@pel_trailer varchar(100),
+	@pel_prod_productora_id int,
+	@pel_dir_director_id int,
+	@pel_act_actor_id int,
+	@pel_gen_genero_id int
+)
+as
+begin
+	declare @pelicula_id varchar (8), @pel_act_tipo_actor varchar(10)
+	set @pel_act_tipo_actor = 'Principal'
+
+	exec sp_insert_tbl_pelicula @pel_titulo,@pel_sinopsis,@pel_clasificacion,@pel_duracion,@pel_año_publicacion,@pel_pais,@pel_precio,@pel_portada,@pel_trailer
+	
+	set @pelicula_id = (select top 1 bit_pel_pelicula from tbl_bitacora_pelicula where (bit_pel_accion = 'INSERT') order by bit_pel_fecha_accion desc)
+
+	exec sp_insert_tbl_pelicula_genero @pel_gen_genero_id,@pelicula_id
+	exec sp_insert_tbl_pelicula_actor @pel_act_actor_id,@pel_act_tipo_actor,@pelicula_id
+	exec sp_insert_tbl_pelicula_productora @pel_prod_productora_id,@pelicula_id
+	exec sp_insert_tbl_pelicula_director @pelicula_id,@pel_dir_director_id
+end
+go
+
+exec sp_insert_pelicula 'Interstellar','En 2067, la destrucción de las cosechas en la Tierra ha hecho que la agricultura sea cada vez más difícil y se vea amenazada la supervivencia de la humanidad. Joseph Cooper, viudo, exingeniero y piloto de la NASA, dirige una granja con su suegro Donald, su hijo Tom y su hija Murph, quien cree que su habitación está embrujada por un poltergeist. Cuando aparecen inexplicablemente extraños patrones de polvo en el suelo de la habitación de Murph, Cooper se da cuenta de que la gravedad está detrás de su formación, no un "fantasma". Interpreta el patrón como un conjunto de coordenadas geográficas formadas en código binario. Cooper y Murph siguen las coordenadas a una instalación secreta de la NASA, donde se encuentran con el exprofesor de Cooper, el doctor Brand.',
+'PG-13','02:49',2014,'Estado Unidos',$10,'NULL','NULL',4,3,5,6
