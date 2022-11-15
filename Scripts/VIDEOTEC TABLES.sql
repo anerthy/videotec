@@ -412,7 +412,9 @@ create table tbl_lista_espera
 list_id_lista_espera int identity (1,1) not null,
 list_codigo_socio varchar(12) not null,
 list_pelicula_id varchar(8) not null,
-list_fecha_solicitud datetime not null DEFAULT GETDATE()
+list_fecha_solicitud datetime not null DEFAULT GETDATE(),
+list_fecha_disponibilidad datetime null,
+list_estado varchar(10) not null check (list_estado in ('En espera','Notificado')) default 'En espera'
 constraint PK_list_id_lista_espera
 primary key clustered (list_id_lista_espera)
 constraint FK_list_codigo_socio

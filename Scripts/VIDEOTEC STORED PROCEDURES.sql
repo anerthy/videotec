@@ -2662,7 +2662,9 @@ CREATE PROCEDURE sp_update_tbl_lista_espera
 	@list_id_lista_espera int,
 	@list_codigo_socio varchar(12),
 	@list_pelicula_id varchar(8),
-	@list_fecha_solicitud datetime
+	@list_fecha_solicitud datetime,
+	@list_fecha_disponibilidad datetime,
+	@list_estado varchar(10)
 )
 AS
 BEGIN
@@ -2670,7 +2672,9 @@ BEGIN
 	update tbl_lista_espera set 
 	list_codigo_socio = @list_codigo_socio,
 	list_pelicula_id= @list_pelicula_id,
-	list_fecha_solicitud = @list_fecha_solicitud
+	list_fecha_solicitud = @list_fecha_solicitud,
+	list_fecha_disponibilidad = @list_fecha_disponibilidad,
+	list_estado = @list_estado
     where list_id_lista_espera  = @list_id_lista_espera
 
 END
@@ -2687,7 +2691,9 @@ BEGIN
 	list_id_lista_espera,
 	list_codigo_socio,
 	list_pelicula_id,
-	list_fecha_solicitud
+	list_fecha_solicitud,
+	list_fecha_disponibilidad,
+	list_estado
 	from tbl_lista_espera
 
 END
@@ -2707,7 +2713,9 @@ BEGIN
 	list_id_lista_espera,
 	list_codigo_socio,
 	list_pelicula_id,
-	list_fecha_solicitud
+	list_fecha_solicitud,
+	list_fecha_disponibilidad,
+	list_estado
 	from tbl_lista_espera
 	where list_id_lista_espera = @list_id_lista_espera
 
@@ -2901,7 +2909,7 @@ GO
 -- =============================================
 USE VIDEOTEC
 GO
-CREATE PROCEDURE sp_insert_tbl_socio_tbl_usuario
+create PROCEDURE sp_insert_socio
 ( 
 	@soc_cedula varchar(9),
 	@soc_nombre varchar(35),
@@ -2914,20 +2922,29 @@ CREATE PROCEDURE sp_insert_tbl_socio_tbl_usuario
 	@soc_genero varchar(10),
 	@soc_fecha_nacimiento date,
 	@soc_foto_perfil varchar(50),
-	@user_contraseña varchar(75)
+	@user_contraseña varchar(75),	
+	@actor int,
+	@director int,
+	@genero int
 )
 AS
 BEGIN
 
-	declare @soc_user_codigo_socio varchar(12), @soc_user_usuario_id int
+	declare @codigo_socio varchar(12), @soc_user_usuario_id int
 
 	exec sp_insert_tbl_socio @soc_cedula,@soc_nombre,@soc_apellido1,@soc_apellido2,@soc_correo,@soc_telefono,@soc_codigo_postal,@soc_direccion_exacta,@soc_genero,@soc_fecha_nacimiento,@soc_foto_perfil	
-	set @soc_user_codigo_socio = (select bit_soc_socio from tbl_bitacora_socio where bit_soc_fecha_accion = (select max(bit_soc_fecha_accion) from tbl_bitacora_socio))
+	set @codigo_socio = (select bit_soc_socio from tbl_bitacora_socio where (bit_soc_fecha_accion = (select max(bit_soc_fecha_accion) from tbl_bitacora_socio)) and (bit_soc_accion = 'INSERT'))
 
 	exec sp_insert_tbl_usuario @soc_cedula,@soc_correo,@user_contraseña,3,@soc_foto_perfil
 	set @soc_user_usuario_id = (select bit_user_usuario_id from tbl_bitacora_usuario where bit_user_fecha_accion = (select max(bit_user_fecha_accion) from tbl_bitacora_usuario))
 
-	exec sp_insert_tbl_socio_usuario @soc_user_codigo_socio,@soc_user_usuario_id
+	exec sp_insert_tbl_socio_usuario @codigo_socio,@soc_user_usuario_id
+
+	exec sp_insert_tbl_socio_actor @codigo_socio,@actor
+
+	exec sp_insert_tbl_socio_director @codigo_socio, @director
+
+	exec sp_insert_tbl_socio_genero @codigo_socio, @genero
 
 END
 GO
@@ -2968,3 +2985,236 @@ go
 
 exec sp_insert_pelicula 'Interstellar','En 2067, la destrucción de las cosechas en la Tierra ha hecho que la agricultura sea cada vez más difícil y se vea amenazada la supervivencia de la humanidad. Joseph Cooper, viudo, exingeniero y piloto de la NASA, dirige una granja con su suegro Donald, su hijo Tom y su hija Murph, quien cree que su habitación está embrujada por un poltergeist. Cuando aparecen inexplicablemente extraños patrones de polvo en el suelo de la habitación de Murph, Cooper se da cuenta de que la gravedad está detrás de su formación, no un "fantasma". Interpreta el patrón como un conjunto de coordenadas geográficas formadas en código binario. Cooper y Murph siguen las coordenadas a una instalación secreta de la NASA, donde se encuentran con el exprofesor de Cooper, el doctor Brand.',
 'PG-13','02:49',2014,'Estado Unidos',$10,'NULL','NULL',4,3,5,6
+
+-- =========================================================
+--					PREFERENCIAS DE SOCIO
+-- =========================================================
+
+--GENERO FAVS
+create proc sp_preferencias_socio_generos
+(
+	@codigo_socio varchar(12)
+)
+as
+BEGIN
+	select gen_id_genero,gen_nombre, gen_descripcion, gen_imagen
+	from tbl_genero_pelicula inner join tbl_socio_genero
+	on gen_id_genero = soc_gen_genero_id
+	where soc_gen_codigo_socio = @codigo_socio
+END
+GO
+
+exec sp_preferencias_socio_generos '002A0B974FD9'
+
+--ACTORES FAVS
+create proc sp_preferencias_socio_actores
+(
+	@codigo_socio varchar(12)
+)
+as
+BEGIN
+	select act_id_actor,act_nombre,act_biografia,act_imagen
+	from tbl_actor inner join tbl_socio_actor
+	on act_id_actor = soc_act_actor_id
+	where soc_act_codigo_socio = @codigo_socio
+END
+GO
+
+exec sp_preferencias_socio_actores '002A0B974FD9'
+
+--DIRECTORES FAVS
+create proc sp_preferencias_socio_directores
+(
+	@codigo_socio varchar(12)
+)
+as
+BEGIN
+	select dir_id_director,dir_nombre, dir_biografia,dir_imagen
+	from tbl_director inner join tbl_socio_director
+	on dir_id_director = soc_dir_id_socio_director
+	where soc_dir_codigo_socio = @codigo_socio
+END
+GO
+
+exec sp_preferencias_socio_directores '002A0B974FD9'
+
+USE VIDEOTEC
+GO
+create proc sp_actores_principales_pelicula
+(
+	@id_pelicula varchar(8)
+)
+as
+BEGIN
+	select act_id_actor,act_nombre,act_imagen 
+	from tbl_actor inner join tbl_pelicula_actor
+	on act_id_actor = pel_act_actor_id
+	where (pel_act_tipo_actor = 'Principal') and (pel_act_pelicula_id = @id_pelicula)
+END
+
+exec sp_actores_principales_pelicula 'FAA82750'
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+USE VIDEOTEC
+GO
+create proc sp_actores_secundarios_pelicula
+(
+	@id_pelicula varchar(8)
+)
+as
+BEGIN
+	select act_id_actor,act_nombre,act_imagen 
+	from tbl_actor inner join tbl_pelicula_actor
+	on act_id_actor = pel_act_actor_id
+	where (pel_act_tipo_actor = 'Secundario') and (pel_act_pelicula_id = @id_pelicula)
+END
+
+exec sp_actores_secundarios_pelicula '34F65B6D'
+
+USE VIDEOTEC
+GO
+create proc sp_actores_pelicula
+(
+	@id_pelicula varchar(8)
+)
+as
+BEGIN
+	select act_id_actor,act_nombre,pel_act_tipo_actor,act_imagen 
+	from tbl_actor inner join tbl_pelicula_actor
+	on act_id_actor = pel_act_actor_id
+	where (pel_act_pelicula_id = @id_pelicula)
+END
+
+exec sp_actores_pelicula '34F65B6D'
+
+Use VIDEOTEC
+go
+create proc sp_prestamo_factura 
+(
+	@pres_id_prestamo int
+) 
+AS
+BEGIN
+	declare
+	@pres_codigo_socio varchar(12),
+	@pres_precio_total money,
+
+	@det_pres_id_detalle_prestamo int,
+	@det_pres_numero_cinta varchar(13),
+	@det_pres_sub_total money,
+	@nombre_socio varchar(200)
+
+	set @pres_codigo_socio = (select pres_codigo_socio from tbl_prestamo where pres_id_prestamo = @pres_id_prestamo)
+	set @pres_precio_total = (select pres_precio_total from tbl_prestamo where pres_id_prestamo = @pres_id_prestamo)
+	set @nombre_socio = (select soc_nombre_completo from view_tbl_socio where soc_codigo_socio = @pres_codigo_socio)
+
+
+	declare factura cursor for
+	select det_pres_id_detalle_prestamo,det_pres_numero_cinta,det_pres_sub_total from tbl_detalle_prestamo
+	where det_pres_prestamo_id = @pres_id_prestamo
+	
+	open factura
+	fetch factura into @det_pres_id_detalle_prestamo,@det_pres_numero_cinta,@det_pres_sub_total
+
+	print 'ID ' + convert(varchar,@pres_id_prestamo)
+	print 'Nombre del socio: ' + @nombre_socio
+	print('---------------------')
+	print('Detalles del prestamo')
+	print '#   ' + 'NUMERO CINTA  ' + 'SUBTOTAL'
+	while(@@FETCH_STATUS = 0)
+	begin
+		print (convert(varchar,@det_pres_id_detalle_prestamo) + ' ' + @det_pres_numero_cinta + ' ' + convert(varchar,@det_pres_sub_total))
+		fetch factura into @det_pres_id_detalle_prestamo,@det_pres_numero_cinta,@det_pres_sub_total
+	end
+
+	print('---------------------')
+	print('Total: ' + convert(varchar,@pres_precio_total))
+	close factura
+	deallocate factura
+END
+GO
+
+exec sp_prestamo_factura 149
+
+-- VER PLAZO DE PRESTAMOS
+create proc sp_plazo_prestamo as
+	select reg_pres_id_registro_prestamos as [ID],
+	convert(varchar,reg_pres_fecha_prestamo,100) as [Fecha prestamo],
+	convert(varchar,reg_pres_fecha_devolucion,100) as [Fecha devolucion],
+	DATEDIFF(DAY,reg_pres_fecha_prestamo,reg_pres_fecha_devolucion) as [Plazo de Dias]
+	from tbl_registro_prestamos
+	order by [Fecha prestamo]
+go
+
+-- TABLA BITACORA GENERAL
+create view bitacora_tablas as
+select bit_act_id_bitacora_actor as [BitacoraID],bit_act_usuario as [Usuario],Tabla = 'tbl_actor',convert(varchar,bit_act_actor) as [RegistroID],bit_act_accion as [Accion],bit_act_fecha_accion as [Fecha de accion] from tbl_bitacora_actor
+union
+select bit_carr_id_bitacora_carrito_compra,bit_carr_usuario,'tbl_carrito_compra',CONVERT(varchar,bit_carr_carrito_compra),bit_carr_accion,bit_carr_fecha_accion from tbl_bitacora_carrito_compra
+union
+select bit_cin_id_bitacora_cinta,bit_cin_usuario,'tbl_cinta',bit_cin_cinta,bit_cin_accion,bit_cin_fecha_accion from tbl_bitacora_cinta
+union
+select bit_clasf_id_bitacora_clasificacion,bit_clasf_usuario,'tbl_clasificacion',bit_clasf_clasificacion,bit_clasf_accion,bit_clasf_fecha_accion from tbl_bitacora_clasificacion
+union
+select bit_det_pres_id_bitacora_detalle_prestamo,bit_det_pres_usuario,'tbl_detalle_prestamo',convert(varchar,bit_det_pres_detalle_prestamo),bit_det_pres_accion,bit_det_pres_fecha_accion from tbl_bitacora_detalle_prestamo
+union
+select bit_del_cin_id_bitacora_devolucion_cinta,bit_del_cin_usuario,'tbl_devolucion_cinta',convert(varchar,bit_del_cin_devolucion_cinta),bit_del_cin_accion,bit_del_cin_fecha_accion from tbl_bitacora_devolucion_cinta
+union
+select bit_dir_id_bitacora_director,bit_dir_usuario,'tbl_director',CONVERT(varchar,bit_dir_director),bit_dir_accion,bit_dir_fecha_accion from tbl_bitacora_director
+union
+select bit_emp_id_bitacora_empresa,bit_emp_usuario,'tbl_empresa',convert(varchar,bit_emp_empresa),bit_emp_accion,bit_emp_fecha_accion from tbl_bitacora_empresa
+union
+select bit_gen_id_bitacora_genero_pelicula,bit_gen_usuario,'tbl_genero_pelicula',convert(varchar,bit_gen_genero_pelicula),bit_gen_accion,bit_gen_fecha_accion from tbl_bitacora_genero_pelicula
+union
+select bit_idm_id_bitacora_idioma,bit_idm_usuario,'tbl_idioma',convert(varchar,bit_idm_idioma_id),bit_idm_accion,bit_idm_fecha_accion from tbl_bitacora_idioma
+union
+select bit_list_id_bitacora_lista_espera,bit_list_usuario,'tbl_lista_espera',convert(varchar,bit_list_lista_espera),bit_list_accion,bit_list_fecha_accion from tbl_bitacora_lista_espera
+union
+select bit_lla_id_bitacora_llamada,bit_lla_usuario,'tbl_llamada',convert(varchar,bit_lla_llamada),bit_lla_accion,bit_lla_fecha_accion from tbl_bitacora_llamada
+union
+select bit_pel_id_bitacora_pelicula,bit_pel_usuario,'tbl_pelicula',bit_pel_pelicula,bit_pel_accion,bit_pel_fecha_accion from tbl_bitacora_pelicula
+union
+select bit_pel_act_id_bitacora_pelicula_actor,bit_pel_act_usuario,'tbl_pelicula_actor',convert(varchar,bit_pel_act_pelicula_actor),bit_pel_act_accion,bit_pel_act_fecha_accion from tbl_bitacora_pelicula_actor
+union
+select bit_pel_dir_id_bitacora_pelicula_director,bit_pel_dir_usuario,'tbl_pelicula_director',convert(varchar,bit_pel_dir_pelicula_director),bit_pel_dir_accion,bit_pel_dir_fecha_accion from tbl_bitacora_pelicula_director
+union
+select bit_pel_gen_id_bitacora_pelicula_genero,bit_pel_gen_usuario,'tbl_pelicula_genero',convert(varchar,bit_pel_gen_pelicula_genero),bit_pel_gen_accion,bit_pel_gen_fecha_accion from tbl_bitacora_pelicula_genero
+union
+select bit_pel_prod_id_bitacora_pelicula_productora,bit_pel_prod_usuario,'tbl_pelicula_productora',convert(varchar,bit_pel_prod_pelicula_productora),bit_pel_prod_accion,bit_pel_prod_fecha_accion from tbl_bitacora_pelicula_productora
+union
+select bit_pres_id_bitacora_prestamo,bit_pres_usuario,'tbl_prestamo',convert(varchar,bit_pres_prestamo),bit_pres_accion,bit_pres_fecha_accion from tbl_bitacora_prestamo
+union
+select bit_prod_id_bitacora_productora,bit_prod_usuario,'tbl_productora',convert(varchar,bit_prod_productora),bit_prod_accion,bit_prod_fecha_accion from tbl_bitacora_productora
+union
+select bit_reg_cin_id_bitacora_devolucion_cinta,bit_reg_cin_usuario,'tbl_devolucion_cinta',convert(varchar,bit_reg_cin_registro_prestamos),bit_reg_cin_accion,bit_reg_cin_fecha_accion from tbl_bitacora_registro_prestamos
+union
+select bit_rol_id_bitacora_rol,bit_rol_usuario,'tbl_rol',convert(varchar,bit_rol_rol),bit_rol_accion,bit_rol_fecha_accion from tbl_bitacora_rol
+union
+select bit_soc_id_bitacora_socio,bit_soc_usuario,'tbl_socio',bit_soc_socio,bit_soc_accion,bit_soc_fecha_accion from tbl_bitacora_socio
+union
+select bit_soc_act_id_bitacora_socio_actor,bit_soc_act_usuario,'tbl_socio_actor',convert(varchar,bit_soc_act_socio_actor),bit_soc_act_accion,bit_soc_act_fecha_accion from tbl_bitacora_socio_actor
+union
+select bit_soc_dir_id_bitacora_socio_director,bit_soc_dir_usuario,'tbl_socio_director',convert(varchar,bit_soc_dir_socio_director),bit_soc_dir_accion,bit_soc_dir_fecha_accion from tbl_bitacora_socio_director
+union
+select bit_soc_gen_id_bitacora_socio_genero,bit_soc_gen_usuario,'tbl_socio_genero',convert(varchar,bit_soc_gen_socio_genero),bit_soc_gen_accion,bit_soc_gen_fecha_accion from tbl_bitacora_socio_genero
+union
+select bit_sub_id_bitacora_subtitulos_cinta,bit_sub_usuario,'tbl_subtitulos_cinta',convert(varchar,bit_sub_subtitulos_cinta),bit_sub_accion,bit_sub_fecha_accion from tbl_bitacora_subtitulos_cinta
+union
+select bit_user_id_bitacora_usuario,bit_user_usuario,'tbl_usuario',convert(varchar,bit_user_usuario_id),bit_user_accion,bit_user_fecha_accion from tbl_bitacora_usuario
+with check option
+go
+
+create proc sp_bitacora as
+BEGIN
+	select * from bitacora_tablas
+	order by Tabla
+END
+GO
+
+create proc sp_ganancias_por_mes as
+begin
+	select Mes,sum(Ganancias) as Ganancias from (select sum(pres_precio_total) as [Ganancias], datename(MONTH,pres_fecha_prestamo) as [Mes] from tbl_prestamo
+	group by pres_fecha_prestamo) as tbl
+	group by Mes
+	order by Ganancias desc
+end
+go

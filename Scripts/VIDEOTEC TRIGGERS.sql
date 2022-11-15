@@ -1431,7 +1431,7 @@ AFTER INSERT
 AS
 	BEGIN
 		declare @bit_soc_act_socio_actor int
-		set @bit_soc_act_socio_actor = (select soc_act_codigo_socio from inserted)
+		set @bit_soc_act_socio_actor = (select soc_act_id_socio_actor from inserted)
 
 		insert into tbl_bitacora_socio_actor(bit_soc_act_socio_actor,bit_soc_act_accion)
 		values(@bit_soc_act_socio_actor,'INSERT')	
@@ -1451,7 +1451,7 @@ AFTER UPDATE
 AS
 	BEGIN
 		declare @bit_soc_act_socio_actor int
-		set @bit_soc_act_socio_actor = (select soc_act_codigo_socio from inserted)
+		set @bit_soc_act_socio_actor = (select soc_act_id_socio_actor from inserted)
 
 		insert into tbl_bitacora_socio_actor(bit_soc_act_socio_actor,bit_soc_act_accion)
 		values(@bit_soc_act_socio_actor,'UPDATE')	
@@ -1471,7 +1471,7 @@ AFTER DELETE
 AS
 	BEGIN
 		declare @bit_soc_act_socio_actor int
-		set @bit_soc_act_socio_actor = (select soc_act_codigo_socio from deleted)
+		set @bit_soc_act_socio_actor = (select soc_act_id_socio_actor from deleted)
 
 		insert into tbl_bitacora_socio_actor(bit_soc_act_socio_actor,bit_soc_act_accion)
 		values(@bit_soc_act_socio_actor,'DELETE')

@@ -36,16 +36,18 @@ select soc_nombre_completo,soc_edad from view_tbl_socio
 where soc_edad = (select max(soc_edad) from view_tbl_socio)
 
 -- ver genero de pelicula
+
 USE VIDEOTEC
 GO
-create view sp_num_peliculas_por_genero as
+create proc sp_num_peliculas_por_genero as
+begin
 	select gen_nombre as Genero,count(pel_id_pelicula) as [Cantidad de Peliculas] from tbl_pelicula
 	inner join tbl_pelicula_genero
 	on pel_id_pelicula = pel_gen_pelicula_id
 	inner join tbl_genero_pelicula
 	on pel_gen_genero_id = gen_id_genero
 	group by gen_nombre
-with check option
+end
 GO
 
 select * from sp_num_peliculas_por_genero
@@ -108,7 +110,6 @@ order by [N° de Peliculas] desc
 --Cantidad de películas en solicitudes en espera,
 
 --tiempos de espera
-select reg_pres_id_registro_prestamos,reg_pres_fecha_prestamo,reg_pres_fecha_devolucion,DATEDIFF(DAY,reg_pres_fecha_prestamo,reg_pres_fecha_devolucion) as [Plazo] from tbl_registro_prestamos
 
 select * from tbl_cinta
 select * from tbl_pelicula
@@ -128,95 +129,6 @@ inner join tbl_actor
 on act_id_actor = pel_act_actor_id
 
 --ver info de peliculas
-select pel_id_pelicula,
-	pel_titulo,
-	act_id_actor,
-	act_nombre,
-	dir_id_director,
-	dir_nombre
-from tbl_pelicula
-inner join tbl_pelicula_actor
-on  pel_id_pelicula = pel_act_pelicula_id
-inner join tbl_actor
-on act_id_actor = pel_act_actor_id
-inner join tbl_pelicula_director
-on pel_dir_pelicula_id = pel_id_pelicula
-inner join tbl_director
-on pel_dir_director_id = dir_id_director
-where pel_act_tipo_actor = 'Principal'
-
---PREFERENCIAS DE SOCIO
-
---GENERO FAVS
-select soc_cedula,soc_nombre + ' ' + soc_apellido1 + ' ' + soc_apellido2 as soc_nombre,
-gen_nombre
-from tbl_socio inner join tbl_socio_genero
-on soc_codigo_socio = soc_gen_codigo_socio
-inner join tbl_genero_pelicula
-on soc_gen_genero_id = gen_id_genero
-
---ACTORES FAVS
-select soc_cedula,soc_nombre + ' ' + soc_apellido1 + ' ' + soc_apellido2 as soc_nombre,
-act_nombre
-from tbl_socio inner join tbl_socio_actor
-on soc_codigo_socio = soc_act_codigo_socio
-inner join tbl_actor
-on soc_act_actor_id = act_id_actor
-
---ACTORES FAVS
-select soc_cedula,soc_nombre + ' ' + soc_apellido1 + ' ' + soc_apellido2 as soc_nombre,
-dir_nombre
-from tbl_socio inner join tbl_socio_director
-on soc_codigo_socio = soc_dir_codigo_socio
-inner join tbl_director
-on soc_dir_id_socio_director = dir_id_director
-
-Use VIDEOTEC
-go
-alter proc sp_prestamo_factura 
-(
-	@pres_id_prestamo int
-) 
-AS
-BEGIN
-	declare
-	@pres_codigo_socio varchar(12),
-	@pres_precio_total money,
-
-	@det_pres_id_detalle_prestamo int,
-	@det_pres_numero_cinta varchar(13),
-	@det_pres_sub_total money,
-	@nombre_socio varchar(200)
-
-	set @pres_codigo_socio = (select pres_codigo_socio from tbl_prestamo where pres_id_prestamo = @pres_id_prestamo)
-	set @pres_precio_total = (select pres_precio_total from tbl_prestamo where pres_id_prestamo = @pres_id_prestamo)
-	set @nombre_socio = (select soc_nombre_completo from view_tbl_socio where soc_codigo_socio = @pres_codigo_socio)
 
 
-	declare factura cursor for
-	select det_pres_id_detalle_prestamo,det_pres_numero_cinta,det_pres_sub_total from tbl_detalle_prestamo
-	where det_pres_prestamo_id = @pres_id_prestamo
-	
-	open factura
-	fetch factura into @det_pres_id_detalle_prestamo,@det_pres_numero_cinta,@det_pres_sub_total
-
-	print 'ID ' + convert(varchar,@pres_id_prestamo)
-	print 'Nombre del socio: ' + @nombre_socio
-	print('---------------------')
-	print('Detalles del prestamo')
-	print '#   ' + 'NUMERO CINTA  ' + 'SUBTOTAL'
-	while(@@FETCH_STATUS = 0)
-	begin
-		print (convert(varchar,@det_pres_id_detalle_prestamo) + ' ' + @det_pres_numero_cinta + ' ' + convert(varchar,@det_pres_sub_total))
-		fetch factura into @det_pres_id_detalle_prestamo,@det_pres_numero_cinta,@det_pres_sub_total
-	end
-
-	print('---------------------')
-	print('Total: ' + convert(varchar,@pres_precio_total))
-	close factura
-	deallocate factura
-END
-GO
-
-exec sp_prestamo_factura 149
 
