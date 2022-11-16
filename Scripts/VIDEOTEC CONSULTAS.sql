@@ -50,8 +50,6 @@ begin
 end
 GO
 
-select * from sp_num_peliculas_por_genero
-
 -- ver dias de prestamo
 create proc sp_tiempo_devolucion_cinta as
 BEGIN
@@ -111,23 +109,13 @@ order by [N° de Peliculas] desc
 
 --tiempos de espera
 
-select * from tbl_cinta
-select * from tbl_pelicula
-select * from tbl_socio
-select * from tbl_idioma
-select * from tbl_carrito_compra
-select * from tbl_prestamo order by pres_precio_total desc
-select * from tbl_detalle_prestamo
-select * from tbl_clasificacion
-select * from tbl_genero_pelicula order by gen_nombre
-select * from tbl_registro_prestamos
 -- ver actores de peliculas
 select pel_id_pelicula,pel_titulo,pel_act_tipo_actor,act_nombre from tbl_pelicula
 inner join tbl_pelicula_actor
 on  pel_id_pelicula = pel_act_pelicula_id
 inner join tbl_actor
 on act_id_actor = pel_act_actor_id
-
+order by pel_act_tipo_actor
 --ver info de peliculas
 
 

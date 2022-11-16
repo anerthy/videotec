@@ -7,7 +7,7 @@ emp_nombre varchar(15) not null,
 emp_telefono varchar(8) not null,
 emp_direccion text not null,
 emp_correo varchar(50) not null,
-emp_logo varchar(50) not null
+emp_logo varchar(50) null
 CONSTRAINT PK_tbl_empresa
 PRIMARY KEY CLUSTERED (emp_id_empresa)
 )

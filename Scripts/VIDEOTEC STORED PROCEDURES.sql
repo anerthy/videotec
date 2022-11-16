@@ -133,18 +133,26 @@ GO
 -- =============================================
 USE VIDEOTEC
 GO
-CREATE PROCEDURE sp_insert_tbl_empresa ( 
+create PROCEDURE sp_insert_tbl_empresa ( 
 	@emp_nombre varchar(15),
 	@emp_telefono varchar(8),
 	@emp_direccion text,
 	@emp_correo varchar(50),
-	@emp_logo varchar(50)
+	@emp_logo varchar(50) NULL
 	)
 AS
 BEGIN
     
-	insert into tbl_empresa(emp_nombre,emp_telefono,emp_direccion,emp_correo,emp_logo) 
-	values (@emp_nombre,@emp_telefono,@emp_direccion,@emp_correo,@emp_logo)
+	IF @emp_logo = NULL
+	BEGIN
+		insert into tbl_empresa(emp_nombre,emp_telefono,emp_direccion,emp_correo) 
+		values (@emp_nombre,@emp_telefono,@emp_direccion,@emp_correo)
+	END
+	ELSE
+	BEGIN
+		insert into tbl_empresa(emp_nombre,emp_telefono,emp_direccion,emp_correo,emp_logo) 
+		values (@emp_nombre,@emp_telefono,@emp_direccion,@emp_correo,@emp_logo)
+	END
 END
 GO
 
@@ -155,26 +163,36 @@ GO
 -- =============================================
 USE VIDEOTEC
 GO
-CREATE PROCEDURE sp_update_tbl_empresa 
+create PROCEDURE sp_update_tbl_empresa 
 	( 
 	@emp_id_empresa int,
 	@emp_nombre varchar(15),
 	@emp_telefono varchar(8),
 	@emp_direccion text,
 	@emp_correo varchar(50),
-	@emp_logo varchar(50)
+	@emp_logo varchar(50) NULL
 	)
 AS
 BEGIN
-    
-	update tbl_empresa set 
-	emp_nombre = @emp_nombre,
-	emp_telefono = @emp_telefono,
-	emp_direccion = @emp_direccion,
-	emp_correo = @emp_correo,
-	emp_logo = @emp_logo
-	where emp_id_empresa = @emp_id_empresa
-
+    IF @emp_logo = NULL
+	BEGIN
+		update tbl_empresa set 
+		emp_nombre = @emp_nombre,
+		emp_telefono = @emp_telefono,
+		emp_direccion = @emp_direccion,
+		emp_correo = @emp_correo
+		where emp_id_empresa = @emp_id_empresa
+	END
+	ELSE
+	BEGIN
+		update tbl_empresa set 
+		emp_nombre = @emp_nombre,
+		emp_telefono = @emp_telefono,
+		emp_direccion = @emp_direccion,
+		emp_correo = @emp_correo,
+		emp_logo = @emp_logo
+		where emp_id_empresa = @emp_id_empresa
+	END
 END
 GO
 
@@ -248,12 +266,86 @@ BEGIN
 END
 GO
 
--- -- -- -- -- -- -- 
+USE VIDEOTEC
+GO
+CREATE PROCEDURE sp_insert_tbl_clasificacion ( 
+	@clasf_simbolo varchar(5),
+	@clasf_nombre varchar(30),
+	@clasf_significado varchar(MAX)
+	)
+AS
+BEGIN
+	insert into tbl_clasificacion(clasf_simbolo,clasf_nombre,clasf_significado) 
+	values (@clasf_simbolo,@clasf_nombre,@clasf_significado)
+END
+GO
+
+USE VIDEOTEC
+GO
+CREATE PROCEDURE sp_update_tbl_clasificacion  
+( 
+	@clasf_simbolo varchar(5),
+	@clasf_nombre varchar(30),
+	@clasf_significado varchar(MAX)
+)
+AS
+BEGIN
+    
+	update tbl_clasificacion set 
+	clasf_nombre = @clasf_nombre,
+	clasf_significado = @clasf_significado
+	where clasf_simbolo = @clasf_simbolo
+
+END
+GO
+
+USE VIDEOTEC
+GO
+CREATE PROCEDURE sp_delete_tbl_clasificacion
+( 
+	@clasf_simbolo varchar(5)
+)
+AS
+BEGIN
+    
+	delete from tbl_clasificacion
+	where clasf_simbolo = @clasf_simbolo
+
+END
+GO
+
+USE VIDEOTEC
+GO
+CREATE PROCEDURE sp_select_all_tbl_clasificacion
+AS
+BEGIN
+	select clasf_simbolo,
+	clasf_nombre,
+	clasf_significado
+	from tbl_clasificacion
+END
+GO
+
+USE VIDEOTEC
+GO
+CREATE PROCEDURE sp_select_tbl_clasificacion
+(
+	@clasf_simbolo varchar(5)
+)
+AS
+BEGIN
+	select clasf_simbolo,
+	clasf_nombre,
+	clasf_significado
+	from tbl_clasificacion
+	where clasf_simbolo = @clasf_simbolo
+END
+GO
 
 -- =============================================
 -- Author:		<Andrés>
 -- Create date: <2022/10/29>
--- Description:	<sp para insertar un registro de un socio>
+-- Description:	<sp para insertar un registro de un tbl_pelicula>
 -- =============================================
 USE VIDEOTEC
 GO
@@ -285,7 +377,7 @@ GO
 -- =============================================
 -- Author:		<Andrés>
 -- Create date: <2022/10/29>
--- Description:	<sp para actualizar un registro de socio>
+-- Description:	<sp para actualizar un registro de tbl_pelicula>
 -- =============================================
 USE VIDEOTEC
 GO
@@ -322,7 +414,7 @@ GO
 -- =============================================
 -- Author:		<Andrés>
 -- Create date: <2022/10/29>
--- Description:	<sp para eliminar un registro de socio>
+-- Description:	<sp para eliminar un registro de tbl_pelicula>
 -- =============================================
 USE VIDEOTEC
 GO
@@ -341,7 +433,7 @@ GO
 -- =============================================
 -- Author:		<Andrés>
 -- Create date: <2022/10/29>
--- Description:	<sp para seleccionar todos los registros de la tabla tbl_socio>
+-- Description:	<sp para seleccionar todos los registros de la tabla tbl_pelicula>
 -- =============================================
 USE VIDEOTEC
 GO
@@ -357,7 +449,7 @@ GO
 -- =============================================
 -- Author:		<Andrés>
 -- Create date: <2022/10/29>
--- Description:	<sp para seleccionar todos los campos de un registro de tbl_socio por el codigo socio>
+-- Description:	<sp para seleccionar todos los campos de un registro de tbl_pelicula >
 -- =============================================
 USE VIDEOTEC
 GO
@@ -2909,7 +3001,7 @@ GO
 -- =============================================
 USE VIDEOTEC
 GO
-create PROCEDURE sp_insert_socio
+CREATE PROCEDURE sp_insert_socio
 ( 
 	@soc_cedula varchar(9),
 	@soc_nombre varchar(35),
@@ -2969,6 +3061,7 @@ create proc sp_insert_pelicula
 )
 as
 begin
+
 	declare @pelicula_id varchar (8), @pel_act_tipo_actor varchar(10)
 	set @pel_act_tipo_actor = 'Principal'
 
@@ -3218,3 +3311,130 @@ begin
 	order by Ganancias desc
 end
 go
+
+create proc sp_ver_cantidad_detalles as
+begin
+	select det_pres_prestamo_id as [PrestamoID],
+	count(det_pres_prestamo_id) as [Cantidad de detalles de prestamo]
+	from tbl_detalle_prestamo group by det_pres_prestamo_id
+	order by [Cantidad de detalles de prestamo] desc
+end
+go
+
+create proc sp_ver_peliculas_por_clasificacion
+(
+	@pel_clasificacion varchar(5)
+)
+as
+begin
+	select pel_id_pelicula,
+		pel_titulo,
+		pel_sinopsis,
+		pel_duracion,
+		pel_año_publicacion,
+		pel_pais,
+		pel_portada,
+		pel_trailer
+	from tbl_pelicula
+	where pel_clasificacion = @pel_clasificacion
+end
+GO
+
+create proc sp_num_peliculas_clasificacion
+as
+begin
+	select pel_clasificacion as [Clasificacion],
+	count(pel_id_pelicula) as [Cantidad de peliculas]
+	from tbl_pelicula
+	group by pel_clasificacion
+	order by [Cantidad de peliculas] desc
+end
+GO
+
+sp_ver_peliculas_por_genero 'PG-13'
+
+create proc sp_peliculas_actor
+(
+	@actor int
+)
+as
+begin
+	select pel_id_pelicula,
+		pel_titulo,
+		pel_sinopsis,
+		pel_clasificacion,
+		pel_duracion,
+		pel_año_publicacion,
+		pel_pais,
+		pel_portada,
+		pel_trailer
+	from tbl_pelicula inner join tbl_pelicula_actor
+	on pel_id_pelicula = pel_act_pelicula_id
+	inner join tbl_actor
+	on act_id_actor = pel_act_actor_id
+	where act_id_actor = @actor
+end
+go
+
+create proc sp_peliculas_director
+(
+	@director int
+)
+as
+begin
+	select pel_id_pelicula,
+		pel_titulo,
+		pel_sinopsis,
+		pel_clasificacion,
+		pel_duracion,
+		pel_año_publicacion,
+		pel_pais,
+		pel_portada,
+		pel_trailer
+	from tbl_pelicula inner join tbl_pelicula_director
+	on pel_id_pelicula = pel_dir_pelicula_id
+	inner join tbl_director
+	on dir_id_director = pel_dir_id_pelicula_director
+	where dir_id_director = @director
+end
+go
+
+create proc sp_ver_peliculas_por_genero
+(
+	@genero int
+)
+as
+begin
+	select pel_id_pelicula,
+		pel_titulo,
+		pel_sinopsis,
+		pel_duracion,
+		pel_año_publicacion,
+		pel_pais,
+		pel_portada,
+		pel_trailer
+	from tbl_pelicula inner join tbl_pelicula_genero
+	on pel_id_pelicula = pel_gen_pelicula_id
+	where pel_gen_genero_id = @genero
+end
+GO
+
+create proc sp_peliculas_productora
+(
+	@productora int
+)
+as
+begin
+	select pel_id_pelicula,
+		pel_titulo,
+		pel_sinopsis,
+		pel_clasificacion,
+		pel_duracion,
+		pel_año_publicacion,
+		pel_pais,
+		pel_portada,
+		pel_trailer
+	from tbl_pelicula inner join tbl_pelicula_productora
+	on pel_id_pelicula = pel_prod_pelicula_id
+	where pel_prod_productora_id = @productora
+end
