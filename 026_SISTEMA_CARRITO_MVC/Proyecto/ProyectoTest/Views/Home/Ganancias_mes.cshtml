@@ -1,0 +1,56 @@
+﻿@{ ViewBag.Title = "Ganancias_mes";
+                Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+<ol class="breadcrumb mb-4 mt-4">
+    <li class="breadcrumb-item"><a href="index.html">Mantenedores</a></li>
+    <li class="breadcrumb-item active">Ganancias por mes</li>
+</ol>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i> Listado de ganancias por mes
+    </div>
+    <div class="card-body">
+
+
+        <hr />
+        <table id="tabla" class="display responsive" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Ganancias</th>
+                    <th>Mes</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+@section scripts{
+
+    <script>
+        var tabladata;
+
+        $(document).ready(function () {
+
+
+                tabladata = $('#tabla').DataTable({
+                    responsive:true,
+                    "ajax": {
+                        "url": '@Url.Action("ListarGanancias_mes", "Home")',
+                        "type": "GET",
+                        "datatype": "json"
+                    },
+                    "columns": [
+                        { "data": "Ganancias" },
+                        { "data": "Mes" }
+                    ],
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+                    }
+                });
+        });
+
+    </script>
+
+}

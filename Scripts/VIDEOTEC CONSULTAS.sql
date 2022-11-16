@@ -19,15 +19,15 @@ select COUNT(soc_codigo_socio) as [Cantidad_Socios] from tbl_socio
 -- socios por genero
 create proc sp_socios_por_genero as
 begin
-	select soc_genero as Genero,COUNT(soc_codigo_socio) as [Cantidad de socios] from tbl_socio group by soc_genero
-	order by [Cantidad de socios] desc
+	select soc_genero as Genero,COUNT(soc_codigo_socio) as [CantidadSocios] from tbl_socio group by soc_genero
+	order by [CantidadSocios] desc
 end
 go
 
 -- cantidad de socios por edad
 create proc sp_socios_por_edad as
 begin
-	select soc_edad as Edad,COUNT(soc_codigo_socio) as [Cantidad de socios] from view_tbl_socio group by soc_edad
+	select soc_edad as Edad,COUNT(soc_codigo_socio) as [CantidadSocios] from view_tbl_socio group by soc_edad
 end
 go
 
@@ -41,7 +41,7 @@ USE VIDEOTEC
 GO
 create proc sp_num_peliculas_por_genero as
 begin
-	select gen_nombre as Genero,count(pel_id_pelicula) as [Cantidad de Peliculas] from tbl_pelicula
+	select gen_nombre as Genero,count(pel_id_pelicula) as [CantidadPeliculas] from tbl_pelicula
 	inner join tbl_pelicula_genero
 	on pel_id_pelicula = pel_gen_pelicula_id
 	inner join tbl_genero_pelicula
@@ -55,11 +55,11 @@ create proc sp_tiempo_devolucion_cinta as
 BEGIN
 	select 
 	del_cin_id_devolucion_cinta as ID,
-	convert(varchar,del_cin_fecha_prestamo,100) as [Fecha Prestamo],
-	convert(varchar,del_cin_fecha_devolucion,100) as [Fecha devolucion],
+	convert(varchar,del_cin_fecha_prestamo,100) as [FechaPrestamo],
+	convert(varchar,del_cin_fecha_devolucion,100) as [FechaDevolucion],
 	DATEDIFF(DAY,del_cin_fecha_prestamo,del_cin_fecha_devolucion) as [Plazo]
 	from tbl_devolucion_cinta
-	order by [Fecha Prestamo]
+	order by [FechaPrestamo]
 END
 GO
 
@@ -68,6 +68,7 @@ create proc sp_peliculas_en_espera
 as
 BEGIN
 	select COUNT(list_pelicula_id) as [Peliculas] from tbl_lista_espera
+	where list_estado = 'En espera'
 END
 GO
 

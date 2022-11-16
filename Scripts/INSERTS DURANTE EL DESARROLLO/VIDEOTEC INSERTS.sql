@@ -3054,3 +3054,9 @@ exec sp_insert_tbl_pelicula_genero 1,AEB6CC0E
 exec sp_insert_tbl_carrito_compra 'AEB6CC0E','0009D9AC24D2'
 exec sp_insert_tbl_detalle_prestamo 4,'AEB6CC0E'
 exec sp_insert_tbl_detalle_prestamo 4,'AEB6CC0E'
+
+EXEC sp_insert_tbl_lista_espera '12F0221DFBE5','072BC556','2022-11-16'
+EXEC sp_insert_tbl_lista_espera '1009DD624322','FAA82750','2022-11-16'
+EXEC sp_insert_tbl_lista_espera '068F0FBF7267','34F65B6D','2022-11-16'
+EXEC sp_insert_tbl_lista_espera '0060DC4CFB86','3A0B1E9F','2022-06-05'
+

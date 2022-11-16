@@ -2717,7 +2717,6 @@ USE VIDEOTEC
 GO
 CREATE PROCEDURE sp_insert_tbl_lista_espera
 ( 
-	@list_id_lista_espera int,
 	@list_codigo_socio varchar(12),
 	@list_pelicula_id varchar(8),
 	@list_fecha_solicitud datetime
@@ -3247,7 +3246,7 @@ go
 
 -- TABLA BITACORA GENERAL
 create view bitacora_tablas as
-select bit_act_id_bitacora_actor as [BitacoraID],bit_act_usuario as [Usuario],Tabla = 'tbl_actor',convert(varchar,bit_act_actor) as [RegistroID],bit_act_accion as [Accion],bit_act_fecha_accion as [Fecha de accion] from tbl_bitacora_actor
+select bit_act_id_bitacora_actor as [BitacoraID],bit_act_usuario as [Usuario],Tabla = 'tbl_actor',convert(varchar,bit_act_actor) as [RegistroID],bit_act_accion as [Accion],bit_act_fecha_accion as [FechaAccion] from tbl_bitacora_actor
 union
 select bit_carr_id_bitacora_carrito_compra,bit_carr_usuario,'tbl_carrito_compra',CONVERT(varchar,bit_carr_carrito_compra),bit_carr_accion,bit_carr_fecha_accion from tbl_bitacora_carrito_compra
 union
@@ -3322,9 +3321,9 @@ go
 create proc sp_ver_cantidad_detalles as
 begin
 	select det_pres_prestamo_id as [PrestamoID],
-	count(det_pres_prestamo_id) as [Cantidad de detalles de prestamo]
+	count(det_pres_prestamo_id) as [DetallesPrestamo]
 	from tbl_detalle_prestamo group by det_pres_prestamo_id
-	order by [Cantidad de detalles de prestamo] desc
+	order by [DetallesPrestamo] desc
 end
 go
 
@@ -3351,10 +3350,10 @@ create proc sp_num_peliculas_clasificacion
 as
 begin
 	select pel_clasificacion as [Clasificacion],
-	count(pel_id_pelicula) as [Cantidad de peliculas]
+	count(pel_id_pelicula) as [CantidadPeliculas]
 	from tbl_pelicula
 	group by pel_clasificacion
-	order by [Cantidad de peliculas] desc
+	order by [CantidadPeliculas] desc
 end
 GO
 
@@ -3445,3 +3444,21 @@ begin
 	on pel_id_pelicula = pel_prod_pelicula_id
 	where pel_prod_productora_id = @productora
 end
+
+USE VIDEOTEC
+GO
+CREATE PROCEDURE sp_peliculas_en_lista_espera
+AS
+BEGIN
+
+	select 
+	list_id_lista_espera,
+	list_codigo_socio,
+	list_pelicula_id,
+	list_fecha_solicitud,
+	list_fecha_disponibilidad,
+	list_estado
+	from tbl_lista_espera
+	where list_estado = 'En espera'
+END
+GO

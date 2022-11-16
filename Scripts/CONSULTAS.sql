@@ -11,6 +11,7 @@ EXEC sp_tiempo_devolucion_cinta
 
 -- VER CANTIDAD PELICULAS EN ESPERA
 EXEC sp_peliculas_en_espera
+exec sp_peliculas_en_lista_espera
 
 -- VER LOGINS
 select * from view_user_logins
