@@ -3181,7 +3181,7 @@ exec sp_actores_pelicula '34F65B6D'
 
 Use VIDEOTEC
 go
-alter proc sp_prestamo_factura 
+create proc sp_prestamo_factura 
 (
 	@pres_id_prestamo int
 ) 
@@ -3211,22 +3211,23 @@ BEGIN
 	open factura
 	fetch factura into @det_pres_id_detalle_prestamo,@det_pres_numero_cinta,@det_pres_sub_total
 
-	print 'VIDEOTEC'
+	print '||||||||||||| VIDEOTEC ||||||||||||||'
 	print 'ID ' + convert(varchar,@pres_id_prestamo)
-	print '                 ' + convert(varchar,@fecha_prestamo,100)
+	print 'Fechas           ' + convert(varchar,@fecha_prestamo,100)
 	print '                 '+convert(varchar,@fechadevolucion,100)
-	print 'Nombre del socio: ' + @nombre_socio
+	print 'Titular'
+	print @nombre_socio
 	print('---- Detalles ----------------------')
-	print '#    ' + 'NUMERO CINTA  ' + 'SUBTOTAL'
+	print '#        NUMERO CINTA       SUBTOTAL'
 	while(@@FETCH_STATUS = 0)
 	begin
-		print (convert(varchar,@det_pres_id_detalle_prestamo) + ' ' + @det_pres_numero_cinta + ' ' + convert(varchar,@det_pres_sub_total))
+		print (convert(varchar,@det_pres_id_detalle_prestamo) + '     ' + @det_pres_numero_cinta + '      ' + convert(varchar,@det_pres_sub_total))
 		fetch factura into @det_pres_id_detalle_prestamo,@det_pres_numero_cinta,@det_pres_sub_total
 	end
 
 	print('------------------------------------')
-	print('Total:             ' + convert(varchar,@pres_precio_total))
-
+	print('Total:                      ' + convert(varchar,@pres_precio_total))
+	print '||||||||||||||||||||||||||||||||||||'
 	close factura
 	deallocate factura
 END

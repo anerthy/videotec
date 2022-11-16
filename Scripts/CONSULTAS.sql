@@ -34,9 +34,9 @@ exec sp_actores_principales_pelicula 'FAA82750'
 --EXEC sp_select_all_tbl_pelicula
 
 -- PREFERENCIAS DEL SOCIO
-exec sp_preferencias_socio_directores '002A0B974FD9'
-exec sp_preferencias_socio_actores '002A0B974FD9'
-exec sp_preferencias_socio_generos '002A0B974FD9'
+exec sp_preferencias_socio_directores 'E8AD7B3AAC6D'
+exec sp_preferencias_socio_actores 'E8AD7B3AAC6D'
+exec sp_preferencias_socio_generos 'E8AD7B3AAC6D'
 
 -- VER CANTIDAD DE PELICULAS POR GENERO
 EXEC sp_num_peliculas_por_genero
@@ -53,7 +53,7 @@ exec sp_ver_peliculas_por_clasificacion 'R'
 EXEC sp_peliculas_actor 5
 
 -- PELICULAS DIRIGIDAS POR DIRECTOR
-sp_peliculas_director 1
+exec sp_peliculas_director 1
 
 -- VER PELICULAS PRODUCIDAS POR UNA PRODUCTORA
 EXEC sp_peliculas_productora 4
