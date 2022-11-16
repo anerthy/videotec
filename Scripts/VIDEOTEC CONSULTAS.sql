@@ -53,7 +53,13 @@ GO
 -- ver dias de prestamo
 create proc sp_tiempo_devolucion_cinta as
 BEGIN
-	select del_cin_fecha_prestamo as [Fecha Prestamo],del_cin_fecha_devolucion as [Fecha devolucion], DATEDIFF(DAY,del_cin_fecha_prestamo,del_cin_fecha_devolucion) as [Plazo] from tbl_devolucion_cinta
+	select 
+	del_cin_id_devolucion_cinta as ID,
+	convert(varchar,del_cin_fecha_prestamo,100) as [Fecha Prestamo],
+	convert(varchar,del_cin_fecha_devolucion,100) as [Fecha devolucion],
+	DATEDIFF(DAY,del_cin_fecha_prestamo,del_cin_fecha_devolucion) as [Plazo]
+	from tbl_devolucion_cinta
+	order by [Fecha Prestamo]
 END
 GO
 

@@ -78,7 +78,7 @@ GO
 -- =============================================
 USE VIDEOTEC
 GO
-CREATE trigger tr_actualizar_estado_cinta_disponible
+create trigger tr_actualizar_estado_cinta_disponible
 on tbl_devolucion_cinta
 AFTER INSERT
 AS

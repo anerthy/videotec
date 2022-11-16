@@ -3181,7 +3181,7 @@ exec sp_actores_pelicula '34F65B6D'
 
 Use VIDEOTEC
 go
-create proc sp_prestamo_factura 
+alter proc sp_prestamo_factura 
 (
 	@pres_id_prestamo int
 ) 
@@ -3199,7 +3199,10 @@ BEGIN
 	set @pres_codigo_socio = (select pres_codigo_socio from tbl_prestamo where pres_id_prestamo = @pres_id_prestamo)
 	set @pres_precio_total = (select pres_precio_total from tbl_prestamo where pres_id_prestamo = @pres_id_prestamo)
 	set @nombre_socio = (select soc_nombre_completo from view_tbl_socio where soc_codigo_socio = @pres_codigo_socio)
-
+	
+	declare @fecha_prestamo datetime, @fechadevolucion datetime
+	set @fecha_prestamo = (select pres_fecha_prestamo from tbl_prestamo where pres_id_prestamo = @pres_id_prestamo)
+	set @fechadevolucion = (select pres_fecha_devolucion from tbl_prestamo where pres_id_prestamo = @pres_id_prestamo)
 
 	declare factura cursor for
 	select det_pres_id_detalle_prestamo,det_pres_numero_cinta,det_pres_sub_total from tbl_detalle_prestamo
@@ -3208,19 +3211,22 @@ BEGIN
 	open factura
 	fetch factura into @det_pres_id_detalle_prestamo,@det_pres_numero_cinta,@det_pres_sub_total
 
+	print 'VIDEOTEC'
 	print 'ID ' + convert(varchar,@pres_id_prestamo)
+	print '                 ' + convert(varchar,@fecha_prestamo,100)
+	print '                 '+convert(varchar,@fechadevolucion,100)
 	print 'Nombre del socio: ' + @nombre_socio
-	print('---------------------')
-	print('Detalles del prestamo')
-	print '#   ' + 'NUMERO CINTA  ' + 'SUBTOTAL'
+	print('---- Detalles ----------------------')
+	print '#    ' + 'NUMERO CINTA  ' + 'SUBTOTAL'
 	while(@@FETCH_STATUS = 0)
 	begin
 		print (convert(varchar,@det_pres_id_detalle_prestamo) + ' ' + @det_pres_numero_cinta + ' ' + convert(varchar,@det_pres_sub_total))
 		fetch factura into @det_pres_id_detalle_prestamo,@det_pres_numero_cinta,@det_pres_sub_total
 	end
 
-	print('---------------------')
-	print('Total: ' + convert(varchar,@pres_precio_total))
+	print('------------------------------------')
+	print('Total:             ' + convert(varchar,@pres_precio_total))
+
 	close factura
 	deallocate factura
 END
