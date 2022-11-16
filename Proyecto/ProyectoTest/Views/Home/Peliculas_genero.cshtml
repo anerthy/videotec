@@ -1,0 +1,57 @@
+﻿@{ ViewBag.Title = "Peliculas_genero";
+                Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+<ol class="breadcrumb mb-4 mt-4">
+    <li class="breadcrumb-item"><a href="index.html">Mantenedores</a></li>
+    <li class="breadcrumb-item active">Socios por genero</li>
+</ol>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i> Listado de Peliculas por genero
+    </div>
+    <div class="card-body">
+
+
+        <hr />
+        <table id="tabla" class="display responsive" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Genero</th>
+                    <th>Peliculas por genero</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+@section scripts{
+
+    <script>
+        var tabladata;
+
+        $(document).ready(function () {
+
+
+                tabladata = $('#tabla').DataTable({
+                    responsive:true,
+                    "ajax": {
+                        "url": '@Url.Action("ListarPeliculas_genero", "Home")',
+                        "type": "GET",
+                        "datatype": "json"
+                    },
+                    "columns": [
+                        { "data": "Genero" },
+                        { "data": "CantidadPeliculas" },
+
+                    ],
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+                    }
+                });
+        });
+
+    </script>
+
+}

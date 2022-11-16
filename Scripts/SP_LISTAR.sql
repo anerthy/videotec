@@ -1,55 +1,73 @@
 USE VIDEOTEC
 GO
-
 create proc sp_listar_idiomas as
 begin
 	select idm_id_idioma,idm_nombre from tbl_idioma
 end
+
+USE VIDEOTEC
+GO
 
 create proc sp_listar_generos as
 begin
 	select gen_id_genero,gen_nombre from tbl_genero_pelicula
 end
 
+USE VIDEOTEC
+GO
 create proc sp_listar_actores as
 begin
 	select act_id_actor,act_nombre from tbl_actor
 end
 
+USE VIDEOTEC
+GO
 create proc sp_listar_directores as
 begin
 	select dir_id_director,dir_nombre from tbl_director
 end
 
+USE VIDEOTEC
+GO
 create proc sp_productoras as
 begin
 	select prod_id_productora,prod_nombre from tbl_productora
 end
 
+USE VIDEOTEC
+GO
 create proc sp_listar_peliculas as
 begin
 	select pel_id_pelicula,pel_titulo from tbl_pelicula
 end
 go
 
+USE VIDEOTEC
+GO
 create proc sp_listar_peliculas_disponibles as
 begin
 	select pel_id_pelicula,pel_titulo from tbl_pelicula where pel_disponibilidad = 'Disponible'
 end
 go
 
+USE VIDEOTEC
+GO
 create proc sp_listar_socios as
 begin
 	select soc_codigo_socio,soc_cedula,soc_nombre+' '+soc_apellido1+' '+soc_apellido2 as soc_nombre from tbl_socio
 end
 go
 
+USE VIDEOTEC
+GO
 create proc sp_listar_roles as
 begin
 	select rol_id_rol,rol_nombre from tbl_rol
 end
 go
 
+USE VIDEOTEC
+GO
 create proc sp_listar_usuarios_socios as
 begin
 	select user_id_usuario,user_nombre from tbl_usuario
@@ -58,17 +76,23 @@ begin
 	where rol_nombre = 'Socio'
 end
 
+USE VIDEOTEC
+GO
 create proc sp_listar_usuarios as
 begin
 	select user_id_usuario,user_nombre from tbl_usuario
 end
 
+USE VIDEOTEC
+GO
 create proc sp_listar_clasificaciones as
 begin
 	select clasf_simbolo,clasf_nombre from tbl_clasificacion
 end
 go
 
+USE VIDEOTEC
+GO
 create proc sp_listar_cintas as
 begin
 	select cin_numero_cinta,pel_titulo,cin_idioma from tbl_cinta
@@ -79,6 +103,8 @@ begin
 end
 go
 
+USE VIDEOTEC
+GO
 create proc sp_listar_prestamos as
 begin
 	select pres_id_prestamo,soc_nombre_completo from tbl_prestamo

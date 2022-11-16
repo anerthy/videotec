@@ -1,5 +1,3 @@
-exec sp_insert_tbl_actor 'Herb', 'Herb Hardy', 'California', 'Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.', 1994, '1976/11/11', 'Nuclear Power Engineer', 'http://dummyimage.com/218x100.png/dddddd/000000' 
-exec sp_insert_tbl_actor 'Karel', 'Karel Revely', 'Indiana', 'Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.', 2003, '1985/10/30', 'Office Assistant II', 'http://dummyimage.com/141x100.png/ff4444/ffffff' 
 exec sp_insert_tbl_actor 'Rebe', 'Rebe Scinelli', 'Louisiana', 'Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.', 1998, '1978/03/22', 'Structural Analysis Engineer', 'http://dummyimage.com/102x100.png/5fa2dd/ffffff' 
 exec sp_insert_tbl_actor 'Heather', 'Heather Gentreau', 'District of Columbia', 'Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.
 
@@ -89,11 +87,6 @@ Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscip
 exec sp_insert_tbl_actor 'Jessamine', 'Jessamine Seamark', 'Texas', 'Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.
 
 Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.', 2011, '2003/10/20', 'Electrical Engineer', 'http://dummyimage.com/158x100.png/ff4444/ffffff' 
-exec sp_insert_tbl_actor 'Idalia', 'Idalia Tenney', 'Texas', 'Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.', 2006, '2000/10/29', 'Operator', 'http://dummyimage.com/131x100.png/5fa2dd/ffffff' 
-exec sp_insert_tbl_actor 'Standford', 'Standford Popping', 'Wisconsin', 'Duis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.', 1999, '2000/09/17', 'Actuary', 'http://dummyimage.com/163x100.png/cc0000/ffffff' 
-exec sp_insert_tbl_actor 'Nevins', 'Nevins Smogur', 'Minnesota', 'Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.
-
-In congue. Etiam justo. Etiam pretium iaculis justo.', 1995, '1989/10/01', 'Cost Accountant', 'http://dummyimage.com/180x100.png/cc0000/ffffff' 
 exec sp_insert_tbl_actor 'Darn', 'Darn Coupland', 'Florida', 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin risus. Praesent lectus.', 2006, '1976/12/23', 'Librarian', 'http://dummyimage.com/146x100.png/cc0000/ffffff' 
 exec sp_insert_tbl_actor 'Pren', 'Pren Scuffham', 'Ohio', 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin risus. Praesent lectus.', 2012, '1981/11/26', 'Senior Editor', 'http://dummyimage.com/180x100.png/ff4444/ffffff' 
 exec sp_insert_tbl_actor 'Janey', 'Janey Drinkel', 'Texas', 'Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.', 2005, '2008/08/21', 'Senior Sales Associate', 'http://dummyimage.com/120x100.png/5fa2dd/ffffff' 

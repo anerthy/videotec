@@ -3040,6 +3040,40 @@ BEGIN
 END
 GO
 
+USE VIDEOTEC
+GO
+CREATE PROCEDURE sp_insert_tbl_socio_tbl_usuario
+( 
+	@soc_cedula varchar(9),
+	@soc_nombre varchar(35),
+	@soc_apellido1 varchar(40),
+	@soc_apellido2 varchar(40),
+	@soc_correo varchar(50),
+	@soc_telefono varchar(8),
+	@soc_codigo_postal varchar(5),
+	@soc_direccion_exacta varchar(100),
+	@soc_genero varchar(10),
+	@soc_fecha_nacimiento date,
+	@soc_foto_perfil varchar(50),
+	@user_contraseña varchar(75)
+)
+AS
+BEGIN
+
+	declare @codigo_socio varchar(12), @soc_user_usuario_id int
+
+	exec sp_insert_tbl_socio @soc_cedula,@soc_nombre,@soc_apellido1,@soc_apellido2,@soc_correo,@soc_telefono,@soc_codigo_postal,@soc_direccion_exacta,@soc_genero,@soc_fecha_nacimiento,@soc_foto_perfil	
+	set @codigo_socio = (select bit_soc_socio from tbl_bitacora_socio where (bit_soc_fecha_accion = (select max(bit_soc_fecha_accion) from tbl_bitacora_socio)) and (bit_soc_accion = 'INSERT'))
+
+	exec sp_insert_tbl_usuario @soc_cedula,@soc_correo,@user_contraseña,3,@soc_foto_perfil
+	set @soc_user_usuario_id = (select bit_user_usuario_id from tbl_bitacora_usuario where bit_user_fecha_accion = (select max(bit_user_fecha_accion) from tbl_bitacora_usuario))
+
+	exec sp_insert_tbl_socio_usuario @codigo_socio,@soc_user_usuario_id
+
+END
+GO
+
+
 use VIDEOTEC
 go
 create proc sp_insert_pelicula 
@@ -3304,7 +3338,7 @@ go
 
 create proc sp_bitacora as
 BEGIN
-	select * from bitacora_tablas
+	select top 10000 * from bitacora_tablas
 	order by Tabla
 END
 GO
@@ -3462,3 +3496,81 @@ BEGIN
 	where list_estado = 'En espera'
 END
 GO
+
+USE VIDEOTEC
+GO
+create proc sp_num_peliculas_por_genero_solicutadas as
+begin
+	select gen_nombre as Genero,count(pel_id_pelicula) as [CantidadPeliculas] from tbl_pelicula
+	inner join tbl_pelicula_genero
+	on pel_id_pelicula = pel_gen_pelicula_id
+	inner join tbl_genero_pelicula
+	on pel_gen_genero_id = gen_id_genero
+	WHERE pel_id_pelicula IN (SELECT distinct SUBSTRING(reg_pres_numero_cinta,1,8) FROM tbl_registro_prestamos)
+	group by gen_nombre
+end
+GO
+
+-- socios por genero
+create proc sp_socios_por_genero as
+begin
+	select soc_genero as Genero,COUNT(soc_codigo_socio) as [CantidadSocios] from tbl_socio group by soc_genero
+	order by [CantidadSocios] desc
+end
+go
+
+-- cantidad de socios por edad
+create proc sp_socios_por_edad as
+begin
+	select soc_edad as Edad,COUNT(soc_codigo_socio) as [CantidadSocios] from view_tbl_socio group by soc_edad
+end
+go
+
+-- ver genero de pelicula
+
+USE VIDEOTEC
+GO
+create proc sp_num_peliculas_por_genero as
+begin
+	select gen_nombre as Genero,count(pel_id_pelicula) as [CantidadPeliculas] from tbl_pelicula
+	inner join tbl_pelicula_genero
+	on pel_id_pelicula = pel_gen_pelicula_id
+	inner join tbl_genero_pelicula
+	on pel_gen_genero_id = gen_id_genero
+	group by gen_nombre
+end
+GO
+
+-- ver dias de prestamo
+create proc sp_tiempo_devolucion_cinta as
+BEGIN
+	select 
+	del_cin_id_devolucion_cinta as ID,
+	convert(varchar,del_cin_fecha_prestamo,100) as [FechaPrestamo],
+	convert(varchar,del_cin_fecha_devolucion,100) as [FechaDevolucion],
+	DATEDIFF(DAY,del_cin_fecha_prestamo,del_cin_fecha_devolucion) as [Plazo]
+	from tbl_devolucion_cinta
+	order by [FechaPrestamo]
+END
+GO
+
+-- peliculas en lista de espera
+create proc sp_peliculas_en_espera
+as
+BEGIN
+	select COUNT(list_pelicula_id) as [Peliculas] from tbl_lista_espera
+	where list_estado = 'En espera'
+END
+GO
+
+-- ver actores de peliculas
+create proc sp_peliculas_actores as
+begin
+	select pel_id_pelicula,pel_titulo,pel_act_tipo_actor,act_nombre from tbl_pelicula
+	inner join tbl_pelicula_actor
+	on  pel_id_pelicula = pel_act_pelicula_id
+	inner join tbl_actor
+	on act_id_actor = pel_act_actor_id
+	order by pel_act_tipo_actor
+end
+go

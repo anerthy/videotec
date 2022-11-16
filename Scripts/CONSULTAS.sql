@@ -1,5 +1,6 @@
 --SCRIPT CON CONSULTAS PARA PROBAR
-
+USE VIDEOTEC
+GO
 -- VER CUANTOS SOCIOS POR GENERO
 EXEC sp_socios_por_genero
 
@@ -27,8 +28,10 @@ EXEC sp_ver_cantidad_detalles
 
 -- VER FACTURA DE UNA PRESTAMO 
 exec sp_prestamo_factura 1475
+--exec sp_select_all_tbl_prestamo
 
 -- VER ACTORES DE UNA PELICULA
+exec sp_peliculas_actores
 exec sp_actores_pelicula '34F65B6D'
 exec sp_actores_secundarios_pelicula '34F65B6D'
 exec sp_actores_principales_pelicula 'FAA82750'
@@ -41,7 +44,8 @@ exec sp_preferencias_socio_generos 'E8AD7B3AAC6D'
 
 -- VER CANTIDAD DE PELICULAS POR GENERO
 EXEC sp_num_peliculas_por_genero
-exec sp_ver_peliculas_por_genero 1
+exec sp_ver_peliculas_por_genero 2
+exec sp_num_peliculas_por_genero_solicutadas
 -- exec sp_select_all_tbl_genero_pelicula
 
 -- VER PELICULAS DE UNA CLASIFICACION
@@ -58,3 +62,6 @@ exec sp_peliculas_director 1
 
 -- VER PELICULAS PRODUCIDAS POR UNA PRODUCTORA
 EXEC sp_peliculas_productora 4
+
+select * from view_pelicula
+select * from view_socio_preferencias
